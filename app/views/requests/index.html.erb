@@ -1,0 +1,27 @@
+<% if current_user.present? 
+
+	 @admin_groups = ClosedGroup.where(:admin_id => current_user.id)
+	 @admin_groups.each do |adm|
+	 	@requests = Request.where(:closed_group_id => adm.id)
+	 	@requests.each do |req|
+	 		%>
+	 		<p> imeto na grupata: 
+	 		<br />
+	 			<%= ClosedGroup.find(req.closed_group_id).name %>
+	 			<br /><br />
+	 			imeto na 4oveka: 
+	 			<br />
+	 			<%= User.find(req.user_id).name %>
+	 		 </p>
+	 		 <br /><br /><br />
+			<%
+	 	end
+
+	 end
+
+	%>
+	
+
+
+
+<% end %>

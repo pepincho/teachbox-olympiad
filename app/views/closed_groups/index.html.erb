@@ -1,0 +1,27 @@
+<h1>Listing closed_groups</h1>
+
+<table>
+  <tr>
+    <th>Admin</th>
+    <th>Decription</th>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @closed_groups.each do |closed_group| %>
+  <tr>
+    <td><%= closed_group.admin_id %></td>
+    <td><%= closed_group.decription %></td>
+    <td><%= closed_group.name %></td>
+    <td><%= link_to 'Show', closed_group %></td>
+    <td><%= link_to 'Edit', edit_closed_group_path(closed_group) %></td>
+    <td><%= link_to 'Destroy', closed_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Closed group', new_closed_group_path %>

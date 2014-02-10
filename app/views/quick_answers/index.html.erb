@@ -1,0 +1,27 @@
+<h1>Listing quick_answers</h1>
+
+<table>
+  <tr>
+    <th>Answer</th>
+    <th>User</th>
+    <th>Quick question</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @quick_answers.each do |quick_answer| %>
+  <tr>
+    <td><%= quick_answer.answer %></td>
+    <td><%= quick_answer.user_id %></td>
+    <td><%= quick_answer.quick_question_id %></td>
+    <td><%= link_to 'Show', quick_answer %></td>
+    <td><%= link_to 'Edit', edit_quick_answer_path(quick_answer) %></td>
+    <td><%= link_to 'Destroy', quick_answer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Quick answer', new_quick_answer_path %>

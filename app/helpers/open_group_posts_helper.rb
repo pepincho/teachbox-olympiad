@@ -1,0 +1,2 @@
+module OpenGroupPostsHelper
+end

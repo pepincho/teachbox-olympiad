@@ -1,0 +1,155 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b> Likes: </b>
+  <%= @likes.length %>
+</p>
+
+<p>
+  <b> Name: </b>
+  <%= @course.name %>
+</p>
+
+<p>
+  <b> Description: </b>
+  <%= @course.description %>
+</p>
+
+<p>
+  <b> Admin: </b>
+  <%= @course_admin %>
+</p>
+
+<% if current_user.present? && !@pesho1 %>
+	<%= link_to "Join", {:controller => :courses, :action => :join, :id => @course.id }, {:method => :post } %>
+<% end %>
+<% if current_user.present? && !@ivan1  && @pesho1 %>
+	<%= link_to "Like", {:controller => :courses, :action => :like, :id => @course.id }, {:method => :post } %>
+<% end %>
+
+<br />
+<br />
+
+<b> Posts: </b> <br />
+<p>
+<%  @neshto.each do |post| 
+		@martin1 = false
+	    some = LikesCoursePost.where("course_post_id = ?", post.id) 
+	    @comments = CommentsCoursePost.where("course_post_id = ?", post.id) 
+	    	some.each do |user| 
+	        	if current_user.present?
+	            	if user.user_id == current_user.id 
+	              		@martin1 = true
+	               		break
+	            	else
+	               		@martin1 = false 
+	            	end
+	           	end
+	      	end
+	    @izch =  LikesCoursePost.where("course_post_id = ? AND like_attribute = ?", post.id, 1).length 
+	    @pol =   LikesCoursePost.where("course_post_id = ? AND like_attribute = ?", post.id, 2).length
+	    @lub =   LikesCoursePost.where("course_post_id = ? AND like_attribute = ?", post.id, 3).length
+	    @nezad = LikesCoursePost.where("course_post_id = ? AND like_attribute = ?", post.id, 4).length
+%>
+    	<%= post.title %>
+      <br />
+      <%= post.content %>
+      <br />
+      <% if post.attach.exists? %>
+        <a href="<%= post.attach.url %> "> <b> File attached </b> </a>
+      <% end %>
+      <br />
+      <% if current_user.present? && !@martin1 && @pesho1 %>
+  		  <%= link_to "Изчерпателно", {:controller => :courses, :action => :like_post, :id => post.id, :value => 1 }, {:method => :post } %>
+        <%= link_to "Полезно", {:controller => :courses, :action => :like_post, :id => post.id , :value => 2  }, {:method => :post } %>
+		    <%= link_to "Любопитно", {:controller => :courses, :action => :like_post, :id => post.id, :value => 3  }, {:method => :post } %>
+			  <%= link_to "Незадоволително", {:controller => :courses, :action => :like_post, :id => post.id, :value => 4  }, {:method => :post } %>
+  		<% else %>
+  			Изчерпателно Полезно Любопитно Незадоволително
+  		<% end %>
+  		<br />
+  		<%= @izch  %> 
+  		<%= @pol %> 
+  		<%= @lub %>
+  		<%= @nezad %>
+  		<br />
+----------------------------------------------
+		<%= form_for(CommentsCoursePost.new) do |f| %>
+  			<% if CommentsCoursePost.new.errors.any? %>
+    			<div id="error_explanation">
+      				<h2> <%= pluralize(CommentsCoursePost.new.errors.count, "error") %> prohibited this comments_course_post from being saved: </h2>
+      				<ul>
+      					<% CommentsCoursePost.new.errors.full_messages.each do |msg| %>
+        					<li> <%= msg %> </li>
+						<% end %>
+      				</ul>
+				</div>
+			<% end %>
+			<% if current_user.present? && @pesho1 %>
+  				<div class="field">
+					<%= f.label :content %><br />
+					<%= f.text_area :content %>
+				</div>
+				<div class="field", style="display: none;">
+					<%= f.label :user_id %><br />
+					<%= f.number_field :user_id, :value => current_user.id %>
+				</div>
+				<div class="field", style="display: none;">
+					<%= f.label :course_post_id %><br />
+					<%= f.number_field :course_post_id, :value => post.id %>
+				</div>
+				<div class="actions">
+					<%= f.submit %>
+				</div>
+			<% end %>
+		<% end %>
+		<br />
+		<% @comments.each do |comments| %>
+			<%= User.find(comments.user_id).name %>:
+			<%= comments.content %>
+			<br />
+		<% end %>
+	<% end %>
+</p>
+
+<div>
+	<% if current_user.present? && @pesho1 && @admin %>
+		<%= form_for(CoursePost.new) do |f| %>
+  			<% if CoursePost.new.errors.any? %>
+    			<div id="error_explanation">
+      				<h2> <%= pluralize(CoursePost.new.errors.count, "error") %> prohibited this course_post from being saved: </h2>
+      				<ul>
+      					<% CoursePost.new.errors.full_messages.each do |msg| %>
+        					<li> <%= msg %> </li>
+      					<% end %>
+      				</ul>
+    			</div>
+  			<% end %>
+			  <div class="field">
+    			<%= f.label :title %><br />
+    			<%= f.text_field :title %>
+  			</div>
+  			<div class="field">
+    			<%= f.label :content %><br />
+    			<%= f.text_area :content %>
+  			</div>
+  			<div class="field", style="display: none;">
+    			<%= f.label :course_id %><br />
+    			<%= f.text_field :course_id, :value => @course.id %>
+  			</div>
+  			<div class="field", style="display: none;">
+    			<%= f.label :user_id %><br />
+   				<%= f.number_field :user_id, :value => current_user.id %>
+  			</div>
+        <div class="field">
+          <%= f.file_field :attach %>
+        </div>  
+  			<div class="actions">
+    			<%= f.submit %>
+  			</div>
+		<% end %>
+	<% end %>
+</div>
+
+<%= link_to 'Edit', edit_course_path(@course) %> |
+<%= link_to 'Back', courses_path %>

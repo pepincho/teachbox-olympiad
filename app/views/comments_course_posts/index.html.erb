@@ -1,0 +1,27 @@
+<h1>Listing comments_course_posts</h1>
+
+<table>
+  <tr>
+    <th>Content</th>
+    <th>Course post</th>
+    <th>User</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @comments_course_posts.each do |comments_course_post| %>
+  <tr>
+    <td><%= comments_course_post.content %></td>
+    <td><%= comments_course_post.course_post_id %></td>
+    <td><%= comments_course_post.user_id %></td>
+    <td><%= link_to 'Show', comments_course_post %></td>
+    <td><%= link_to 'Edit', edit_comments_course_post_path(comments_course_post) %></td>
+    <td><%= link_to 'Destroy', comments_course_post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Comments course post', new_comments_course_post_path %>

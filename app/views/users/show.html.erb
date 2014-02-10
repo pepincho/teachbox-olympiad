@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @user.name %>
+</p>
+
+<p>
+  <b>Password:</b>
+  <%= @user.password %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%= @user.email %>
+</p>
+
+
+<br /><br />
+<% if @user.pic.exists? %>
+	<%= image_tag @user.pic.url(:medium) %> <br /><br /><br />
+	<a href="<%= @user.pic.url %> "> <b> File attached </b> </a>
+<% end %>
+<br />
+<% if current_user.present? && @kartof %>
+	<%= link_to 'Edit', edit_user_path(@user) %> |
+<% end %>
+<%= link_to 'Back', users_path %>

@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Answer:</b>
+  <%= @quick_answer.answer %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @quick_answer.user_id %>
+</p>
+
+<p>
+  <b>Quick question:</b>
+  <%= @quick_answer.quick_question_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_quick_answer_path(@quick_answer) %> |
+<%= link_to 'Back', quick_answers_path %>

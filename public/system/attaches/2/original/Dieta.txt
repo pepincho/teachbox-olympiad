@@ -1,0 +1,14 @@
+low-carb 1g na teglo paundove
+high carb-kolkoto se moje poveche stiga da sum si v kaloriite i proteina
+no carb-the least the beast
+high den-2000
+low den-1900
+no den-1800
+
+Monday = High Carb -gurdi
+Tuesday = Low Carb-ruce
+Wednesday = No Carb-rest
+Thursday = Low Carb-rest
+Friday = High carb-grub
+Saturday = Low Carb-ramene
+Sunday = No Carb

@@ -1,0 +1,486 @@
+<% if current_user.present? %>
+
+   <div class="navigation-bar fixed-top dark shadow">
+      <nav class="navigation-bar-content topbar" style="margin:0 auto; ">
+      <a href="<%= root_path %>" >
+         <%= image_tag("logo.png", :style => "padding: 0; margin:0; padding-top:5px;", :class => "element") %>
+      </a>
+        
+         <div class="element input-element s-deformation">
+          <form>
+            <div class="input-control text " >
+              <input class="search" type="text" placeholder="Search...">
+              <button class="btn-search"></button>
+            </div>
+          </form>
+         </div>
+         
+                <div class="element place-right">
+              <a class="dropdown-toggle" href="#">
+                <span class="icon-cog"></span>
+              </a>
+              <ul class="dropdown-menu place-right" data-role="dropdown">
+                <li><a href="#">Your questions</a></li>
+                <li> <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> </li>
+                <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+              </ul>
+            </div>
+            
+            <span class="element-divider place-right"></span>
+              <a class="element place-right" href="#"><span class="icon-bell"></span></a>
+            
+            <%= link_to({:controller => :users, :action => :show, :id => current_user.id }, {:method => :get }) do %>
+            <span class="element-divider place-right"></span>
+            <button class="element image-button image-left place-right" style="width:180px; padding-right: 5px;">
+              <font style="font-size:20px; color: white; "> 
+               <%= current_user.name  %>
+              </font>
+              <img src="imgs/alo.jpg"/>
+            </button>
+            <% end %>
+      </nav>
+     </div>
+     <div style="height:43px;"> </div>
+     <div class="topbar" style="margin-left: auto ;  margin-right: auto ;" >
+      <div class="left-pane"> 
+
+       <%= link_to  new_open_group_path() do %>
+           <button class="large button span_5_of_5" style="margin-top: 20px; font-size: 16px; background-color:#333; color: white;">Създай група за дискусии</button>
+       <% end %>
+       <%= link_to  new_closed_group_path() do %>
+           <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;" >Създай частна група</button>
+       <% end %>
+       <%= link_to new_course_path() do %>
+        <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;">Създай курс</button>
+       <% end %>
+       <%= link_to  do %>
+                  <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;">Задай въпрос</button>
+       <% end %>
+        <nav>
+              
+                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
+                  <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                    <% @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id %>
+                          <li><%= link_to OpenGroup.find(a.open_group_id).name,  {:controller => :open_groups, :action => :show, :id => OpenGroup.find(a.open_group_id).id }, {:method => :get }  %>
+                          </li>
+                        <% end
+                    end
+
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if current_user.id == b.user_id %>
+                         <li><%= link_to Course.find(b.course_id).name,  {:controller => :courses, :action => :show, :id => Course.find(b.course_id).id }, {:method => :get }  %>
+                          </li>
+                      <% end
+                    end
+
+                  @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id %>
+                        <li> <%= link_to ClosedGroup.find(c.closed_group_id).name,  {:controller => :closed_groups, :action => :show, :id => ClosedGroup.find(c.closed_group_id).id }, {:method => :get }  %>
+
+                         </li>
+                      <% end
+                    end %>
+                  </ul>
+                </nav>
+
+      </div>
+      <div class="middle-pane"> 
+              <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; ">
+                <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;  " > Популярни групи за дискусия</button>
+                <% count = 0 
+                   broi = 0%>
+                <% OpenGroup.order("counter DESC").each do |x| %>
+                    
+                    <% 
+                      @pesho = false
+                      @users = UserOpenGroup.where(:open_group_id => x.id) 
+                      @usersname = Array.new 
+                      @users.each do |user| 
+                        @usersname.push(User.find(user.user_id).name) 
+                          if current_user.present?
+                            if user.user_id == current_user.id 
+                              @pesho = true
+                              break
+                            else
+                              @pesho = false 
+                            end
+                          end
+                    end %>
+
+                    <% if current_user.present? && !@pesho
+                      count += 1
+                      if count == 4
+                          break
+                      end
+
+                     %>
+
+                    <% broi = broi + 1 %>
+               
+                <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+                  <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:30%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;"> 
+                          <%= link_to x.name,  {:controller => :open_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                       </h5>
+                       <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                       &nbsp;<span style="font-size: 15px;">
+                         <% @likes = LikesOpenGroup.where(:open_group_id => x.id) %>
+                         <%= @likes.length %>
+                       </span>
+                      <br />
+                      <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                     &nbsp;<span style="font-size: 15px;">
+                      <% users = UserOpenGroup.where(:open_group_id => x.id) %>
+                      <%= users.length %>
+                     </span>
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:60%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                      <%= x.description %>
+                      </td> 
+                    <td  style=" border-bottom: 1px #ccc solid; width:10%;">
+                     <%= link_to image_tag("open129.png", :style => "width: 60px; height: 60px; margin-left:5px;", :class => "element"), {:controller => :open_groups, :action => :join, :id => x.id }, {:method => :post } %>
+                    </td>
+               </tr>
+               </table>
+             
+               <% else 
+                         %>
+                    <% end %>
+            <% end %>
+            <% if broi == 0 %>
+                <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+                  <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:10%; height: 40px; text-align: center;">
+                       Вие сте участник във всичките групи за дискусия !
+                    </td>
+               </tr>
+               </table>
+             
+            <% end %>
+            </div>
+
+
+                
+
+            <!--  --------------------------------------------------------------------------------------
+                  Популярни курсуве
+            -->
+
+            <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; ">
+                <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;  " > Популярни курсове</button>
+                <% count = 0
+                   broi = 0 %>
+                <% Course.order("counter DESC").each do |x| %>
+             
+                    <%
+                      @pesho = false
+                      @users = UserCourse.where(:course_id => x.id) 
+                      @usersname = Array.new 
+                      @users.each do |user| 
+                        @usersname.push(User.find(user.user_id).name) 
+                          if current_user.present?
+                            if user.user_id == current_user.id 
+                              @pesho = true
+                              break
+                            else
+                              @pesho = false 
+                            end
+                          end
+                    end %>
+
+                    <% if current_user.present? && !@pesho
+                      count += 1
+                      if count == 4
+                          break
+                      end
+                     %>
+
+                      <% broi = broi + 1 %>
+               
+                <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+                  <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:30%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;"> 
+                           <%= link_to x.name,  {:controller => :courses, :action => :show, :id => x.id }, {:method => :get }, {:style => 'color: black;' } %>
+                       </h5>
+                       <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                       &nbsp;<span style="font-size: 15px;">
+                         <% @likes = LikesCourse.where(:course_id => x.id) %>
+                         <%= @likes.length %>
+                       </span>
+                      <br />
+                      <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                     &nbsp;<span style="font-size: 15px;">
+                      <% users = UserCourse.where(:course_id => x.id) %>
+                      <%= users.length %>
+                     </span>
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:60%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                      <%= x.description %>
+                      </td> 
+                    <td  style=" border-bottom: 1px #ccc solid; width:10%;">
+                     <%= link_to image_tag("open129.png", :style => "width: 60px; height: 60px; margin-left:5px;", :class => "element"), {:controller => :courses, :action => :join, :id => x.id }, {:method => :post } %>
+                    </td>
+               </tr>
+               </table>
+             
+               <% else  %>
+                    <% end %>
+            <% end %>
+            <% if broi == 0 %>
+                <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+                  <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:10%; height: 40px; text-align: center;">
+                       Вие сте участник във всичките курсове !
+                    </td>
+               </tr>
+               </table>
+             
+            <% end %>
+            </div>
+
+
+             <!--  --------------------------------------------------------------------------------------
+                  Популярни частни групи
+            -->
+
+              <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; ">
+                <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;  " > Популярни частни групи </button>
+                <% count = 0 
+                   broi = 0%>
+                <% ClosedGroup.order("counter DESC").each do |x| %>
+             
+                    <%
+                      @isJoined = false
+                      @users = UserClosedGroup.where(:closed_group_id => x.id) 
+                      @users.each do |user| 
+                          if current_user.present?
+                            if user.user_id == current_user.id 
+                              @isJoined = true
+                              break
+                            else
+                              @isJoined = false 
+                            end
+                          end
+                    end 
+
+                    @users1 = Request.where(:closed_group_id => x.id)
+                       @isReq = false
+                      @users1.each do |user| 
+                          if current_user.present?
+                            if user.user_id == current_user.id 
+                              @isReq = true
+                              break
+                            else
+                              @isReq = false 
+                            end
+                          end
+                    end 
+                      
+
+                  if current_user.present?  && !( @isReq || @isJoined )
+                      count += 1
+                      if count == 4
+                          break
+                      end
+                     %>
+                      <% broi = broi + 1  %>
+               
+                <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+                  <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:30%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;">
+                        <%= link_to x.name,  {:controller => :closed_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                       </h5>
+                       <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                       &nbsp;<span style="font-size: 15px;">
+                         <% @likes = LikesClosedGroup.where(:closed_group_id => x.id) %>
+                         <%= @likes.length %>
+                       </span>
+                      <br />
+                      <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                     &nbsp;<span style="font-size: 15px;">
+                      <% users = UserClosedGroup.where(:closed_group_id => x.id) %>
+                      <%= users.length %>
+                     </span>
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:60%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                      <%= x.decription %>
+                      </td> 
+                    <td  style=" border-bottom: 1px #ccc solid; width:10%;">
+                     <%= link_to image_tag("open129.png", :style => "width: 60px; height: 60px; margin-left:5px;", :class => "element"), {:controller => :closed_groups, :action => :requested, :id => x.id }, {:method => :post } %>
+                    </td>
+               </tr>
+               </table>
+                    <% end %>
+
+            <% end %>
+            <% if broi == 0 %>
+                <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+                  <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:10%; height: 40px; text-align: center;">
+                       Вие сте кандидадствали или сте участник във всичките частни групи !
+                    </td>
+               </tr>
+               </table>
+             
+            <% end %>
+            </div>
+                
+      </div>
+        
+      
+      <div class="right-pane"> 
+        <nav>
+              <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси</button>
+                                    <li><a href="#_push">Push button</a></li>
+                                    <li><a href="#_command">Command button</a></li>
+                                    <li><a href="#_toolbar">Tool bar</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+              </ul>
+        </nav>
+
+        <nav>
+              
+                <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
+                    <% opens = OpenGroup.all
+                    limit = 0;
+                    opens.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :open_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                    <% cors = Course.all
+                    limit = 0;
+                    cors.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :courses, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+
+                    <% close = ClosedGroup.all
+                    limit = 0;
+                    close.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :closed_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                  
+                 </ul>
+        </nav>
+
+      </div>
+    </div>
+     </div>
+    
+
+
+
+
+<!--   Главна страница преди да влезнеш  
+-------------------------------------------------------------------------------------------------------------
+  -->
+
+
+<% else %>
+    <div class="navigation-bar fixed-top dark shadow">
+      <nav class="navigation-bar-content topbar" style="margin:0 auto; ">
+        <a href="#" >
+
+        
+        <%= image_tag("logo.png", :style => "padding: 0; margin:0; padding-top:5px;", :class => "element") %>
+
+        </a>
+        <span class="element-divider"></span>
+         
+        <%= form_for("user", :url => user_session_path) do |f| %> 
+        <button type="submit" class="element place-right">
+          <font style="font-weight:bold; font-size: 15px;">Sign in</font>
+        </button>
+
+
+        <div class="element place-right" style="padding-right: 11px;">
+          <div class="input-control checkbox" >
+          <label>
+             <%= f.check_box :remember_me, :checked => "checked" %>    
+            <span class="check"></span>           
+          </label>
+          </div>
+        </div>
+
+
+        <div class="element place-right" style="padding-left: -10px;">
+          <div class="input-control password " data-role="input-control">
+            <%= f.password_field :password, :placeholder => "Парола", :style => "width: 200px; margin-left: -4px; margin-right: -4px", :tabindex => 2 %>
+          </div>    
+        </div>
+        <div class="element place-right" style="padding-left: -10px;">
+            <div class="input-control text " data-role="input-control">
+              <%= f.email_field :email, :autofocus => true, :placeholder => "Е-mail", :style => "width: 200px; margin-right: -4px; margin-left: -4px;",  :tabindex => 1  %>
+            </div>  
+        </div>
+        <% end %>
+      </nav>
+    </div>
+    <div style="height:40px;"> </div>
+
+    <%= image_tag("cover.jpg", :style => "min-width: 1000px; position: relative;") %>
+   
+    <div class="block" style="background-color:white; position: absolute; height:auto; width: 100%; min-width: 1000px;  ">
+      <div class="section group">
+        <div class="col span_1_of_5"><h4>Групи за дискусия</h4><p class="centralno">Мястото, където всеки има думата - "В спора се ражда истината!".</p></div>
+        <div class="col span_1_of_5"><h4>Частни групи</h4><p class="centralno">Целта на този тип групи е да се споделя лична информация между членовете.</p></div>
+        <div class="col span_1_of_5 centered" style=" margin-bottom: 0;" >
+          <h4>Регистрация</h4>
+          <%= form_for(resource, :as => resource_name,  :url => registration_path(resource_name), :html => { :class => "hash"}) do |f| %>
+          <form style="text-align: center;">
+              <div class="input-control text" data-role="input-control">
+                      <%= devise_error_messages! %>
+                      <%= f.text_field :name, :placeholder => "Име и фамилия", :style => "margin-bottom:4px; text-align: center;",  :tabindex => 3 %> 
+                      <%= f.email_field :email, :placeholder=>"Електронна поща", :style =>"margin-bottom:4px; text-align: center;",  :tabindex => 4 %>
+                      <%= f.password_field :password, :placeholder=>"Парола", :style => "margin-bottom:4px; text-align: center;",  :tabindex => 5 %>
+                      <%= f.password_field :password_confirmation, :placeholder=>"Повтори парола", :style => "margin-bottom:4px; text-align: center;",  :tabindex => 6 %>
+                      <button type="submit" class="large button inverse" style="width: 100%;">Регистрирай се!</button>
+              </div>
+          </form>
+          <% end %>
+        </div>
+        <div class="col span_1_of_5"><h4>Курсове</h4><p class="centralno">Тук можете да водите Вашия онлайн курс по един иновативен начин.</p></div>
+        <div class="col span_1_of_5"><h4>Бързи въпроси</h4><p class="centralno">Задай въпрос - бързо, лесно и ефективно.</p></div>
+      </div>
+    </div>
+
+
+
+<% end %>

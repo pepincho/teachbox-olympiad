@@ -1,0 +1,211 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,800&subset=latin,cyrillic);
+body,html{
+font-size:100%;
+font-family: 'Open Sans';
+margin:0;
+padding:0;
+color:grey;
+}
+
+#table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.center-placeholder::-webkit-input-placeholder {
+   text-align:center;
+}
+
+.center-placeholder:-moz-placeholder { /* Firefox 18- */
+   text-align:center;  
+}
+
+.center-placeholder::-moz-placeholder {  /* Firefox 19+ */
+   text-align:center;  
+}
+
+.center-placeholder:-ms-input-placeholder {  
+   text-align:center; 
+}
+
+
+textarea { 
+    resize: none; 
+}
+
+textarea:focus,input[type=""] { 
+    outline: 0;
+}
+
+
+
+.span_5_of_5 {
+	width: 100%;
+}
+.span_4_of_5 {
+  	width: 79.68%; 
+}
+.span_3_of_5 {
+  	width: 59.36%; 
+}
+.span_2_of_5 {
+  	width: 39.04%;
+}
+.span_1_of_5 {
+  	width: 18.72%;
+}
+
+
+
+.section {
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+.group:before,
+.group:after {
+    content:"";
+    display:table;
+}
+.group:after {
+    clear:both;
+}
+.group {
+    zoom:1; /* For IE 6/7 (trigger hasLayout) */
+}
+.col {
+    text-align: center;
+	display: block;
+	float:left;
+	margin: 1% 0 1% 1.6%;
+}	
+.col:first-child { margin-left: 0; }
+.span_4_of_4 {
+	width: 100%; 
+}
+
+.span_3_of_4 {
+	width: 74.6%; 
+}
+
+.span_2_of_4 {
+	width: 49.2%; 
+}
+
+.span_1_of_4 {
+	width: 23.8%; 
+}
+.span_5_of_5 {
+	width: 100%;
+}
+
+.span_4_of_5 {
+  	width: 79.68%; 
+}
+
+.span_3_of_5 {
+  	width: 59.36%; 
+}
+
+.span_2_of_5 {
+  	width: 39.04%;
+}
+.span_1_of_5 {
+  	width: 18.72%;
+}
+	::selection {
+	background: #b5bd9b; /* Safari */
+	}
+   ::-moz-selection {
+	background: #b5bd9b; /* Firefox */
+   }
+   #object{
+	background-color: #fe5652;
+
+	visibility: hidden;
+}
+
+.topbar{
+     width: 90% ;
+	 margin-right: 0;
+	 margin-left: 0;
+}
+
+.details
+{
+    text-align: center;
+}
+
+.search{
+		 width: 550px !important ;
+}
+
+.block
+{
+ padding-left: 80px; 
+ padding-right:80px;
+ margin-top: -190px;
+}
+
+.left-pane{
+	width: 20%;
+	height: auto;
+	float: left;
+}
+
+.middle-pane{
+	width: 60%; 
+	height: auto;
+	float: left;
+	
+}
+
+.right-pane{
+	width: 20%;
+	height: auto;
+	float: left;
+}
+
+.s-deformation{
+	margin-left: 40px;
+ }
+ 
+ .logo{
+	padding: 0 !important;
+	margin:0 !important;
+	padding-top:5px !important;
+	margin-left: 20px !important;
+ }
+
+@media only screen and (max-width: 1200px) {
+	.block
+	{
+	 padding-left: 20px ;
+	 padding-right:20px ;
+	  margin-top: -120px;
+	}
+}
+
+@media only screen and (max-width: 1100px) {
+	.topbar{
+		 width: 1000px ;
+	}
+
+}
+
+@media only screen and (max-width: 1400px) {
+
+	.search{
+		 width: 430px !important;
+    }
+	 .logo{
+		padding: 0;
+		margin:0;
+		padding-top:5px;
+		margin-left: 0px !important;
+	 }
+	
+	.s-deformation{
+		margin-left: 20px;
+	}
+}

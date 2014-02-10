@@ -1,0 +1,27 @@
+<h1>Listing comments_open_group_posts</h1>
+
+<table>
+  <tr>
+    <th>Content</th>
+    <th>Open group post</th>
+    <th>User</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @comments_open_group_posts.each do |comments_open_group_post| %>
+  <tr>
+    <td><%= comments_open_group_post.content %></td>
+    <td><%= comments_open_group_post.open_group_post_id %></td>
+    <td><%= comments_open_group_post.user_id %></td>
+    <td><%= link_to 'Show', comments_open_group_post %></td>
+    <td><%= link_to 'Edit', edit_comments_open_group_post_path(comments_open_group_post) %></td>
+    <td><%= link_to 'Destroy', comments_open_group_post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Comments open group post', new_comments_open_group_post_path %>

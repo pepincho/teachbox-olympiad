@@ -1,0 +1,2 @@
+module QuickAnswersHelper
+end

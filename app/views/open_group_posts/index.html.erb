@@ -1,0 +1,29 @@
+<h1>Listing open_group_posts</h1>
+
+<table>
+  <tr>
+    <th>Content</th>
+    <th>Open group</th>
+    <th>Title</th>
+    <th>User</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @open_group_posts.each do |open_group_post| %>
+  <tr>
+    <td><%= open_group_post.content %></td>
+    <td><%= open_group_post.open_group_id %></td>
+    <td><%= open_group_post.title %></td>
+    <td><%= open_group_post.user_id %></td>
+    <td><%= link_to 'Show', open_group_post %></td>
+    <td><%= link_to 'Edit', edit_open_group_post_path(open_group_post) %></td>
+    <td><%= link_to 'Destroy', open_group_post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Open group post', new_open_group_post_path %>

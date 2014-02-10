@@ -1,0 +1,181 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b> Likes: </b>
+  <%= @likes.length %>
+</p>
+
+<p>
+  <b> Name: </b>
+  <%= @open_group.name %>
+</p>
+
+<p>
+  <b> Description: </b>
+  <%= @open_group.description %>
+</p>
+
+<% if current_user.present? && !@pesho %>
+	<%= link_to "Join", {:controller => :open_groups, :action => :join, :id => @open_group.id }, {:method => :post } %>
+<% end %>
+<% if current_user.present? && !@ivan && @pesho %>
+	<%= link_to "Like", {:controller => :open_groups, :action => :like, :id => @open_group.id }, {:method => :post } %>
+<% end %>
+
+<p>	
+<b> Users: </b> <br />
+	<% @usersname.each do |user| %>
+        <%= user %>
+		<br />
+	<% end %>
+</p>
+  
+<b> Posts: </b><br />
+<p>
+<%  @neshto.each do |post| 
+    	@martin = false
+    	some = LikesOpenGroupPost.where("open_group_post_id = ?", post.id) 
+    	@comments = CommentsOpenGroupPost.where("open_group_post_id = ?", post.id) 
+
+    		some.each do |user| 
+           		if current_user.present?
+            		if user.user_id == current_user.id 
+               			@martin = true
+               			break
+            		else
+               			@martin = false 
+            		end
+           		end
+      		end
+
+      	@izch =  LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 1).length 
+      	@pol =   LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 2).length
+      	@lub =   LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 3).length
+      	@nezad = LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 4).length
+%>
+		<%= post.title %>
+		<br />
+        <%= post.content %>
+        <br />
+        <% if post.attach.exists? %>
+        	<a href="<%= post.attach.url %> "> <b> File attached </b> </a>
+        <% end %>
+        <br />
+
+        <% if current_user.present? && !@martin && @pesho %>
+  			<%= link_to "Изчерпателно", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 1 }, {:method => :post } %>
+  			<%= link_to "Полезно", {:controller => :open_groups, :action => :like_post, :id => post.id , :value => 2  }, {:method => :post } %>
+  			<%= link_to "Любопитно", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 3  }, {:method => :post } %>
+  			<%= link_to "Незадоволително", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 4  }, {:method => :post } %>
+  		<% else %>
+  			Изчерпателно Полезно Любопитно Незадоволително
+  		<% end %>
+ 		<br />
+  		<%= @izch %> 
+  		<%= @pol %> 
+  		<%= @lub %>
+  		<%= @nezad %>
+  		<br />
+----------------------------------------------
+  		<%= form_for(CommentsOpenGroupPost.new) do |f| %>
+  			<% if CommentsOpenGroupPost.new.errors.any? %>
+    			<div id="error_explanation">
+      				<h2> <%= pluralize(CommentsOpenGroupPost.new.errors.count, "error") %> prohibited this comments_open_group_post from being saved: </h2>
+      				<ul>
+      					<% CommentsOpenGroupPost.new.errors.full_messages.each do |msg| %>
+        					<li> <%= msg %> </li>
+      					<% end %>
+      				</ul>
+    			</div>
+  			<% end %>
+
+  			<% if current_user.present? %>
+  				<div class="field">
+    				<%= f.label :content %><br />
+    				<%= f.text_area :content %>
+  				</div>
+  				<div class="field", style="display: none;">
+    				<%= f.label :user_id %><br />
+    				<%= f.number_field :user_id, :value => current_user.id %>
+  				</div>
+  				<div class="field", style="display: none;">
+    				<%= f.label :open_group_post_id %><br />
+    				<%= f.number_field :open_group_post_id, :value => post.id %>
+  				</div>
+  				<div class="actions">
+    				<%= f.submit %>
+  				</div>
+			<% end %>
+  		<% end %>
+
+  		<br />
+  		<% @comments.each do |comments| %>
+        <% likescomment = LikesCommentsOpenGroupPost.where("comments_open_group_post_id = ?", comments.id) %>
+        <% 
+          likescomment.each do |user| 
+            if current_user.present?
+              if user.user_id == current_user.id 
+                @patka = true
+                break
+              else
+                @patka = false 
+              end
+            end
+          end
+        %>
+    		<%= User.find(comments.user_id).name %>:
+    		<%= comments.content %> | 
+        <%= likescomment.length %> | 
+        <% if current_user.present? && !@patka %>
+          <%= link_to "Like", {:controller => :open_groups, :action => :like_comment, :id => comments.id }, {:method => :post } %>
+        <% end %>
+    		<br />
+       
+  		<% end %>
+
+      
+     
+	<% end %>
+</p>
+
+<div>
+	<% if current_user.present? && @pesho %>
+		<%= form_for(OpenGroupPost.new) do |f| %>
+  			<% if OpenGroupPost.new.errors.any? %>
+    			<div id="error_explanation">
+      				<h2> <%= pluralize(OpenGroupPost.new.errors.count, "error") %> prohibited this open_group_post from being saved: </h2>
+      				<ul>
+      					<% OpenGroupPost.new.errors.full_messages.each do |msg| %>
+        					<li> <%= msg %> </li>
+      					<% end %>
+      				</ul>
+    			</div>
+  			<% end %>
+  			<div class="field">
+    			<%= f.label :title %><br />
+    			<%= f.text_field :title %>
+  			</div>
+  			<div class="field">
+    			<%= f.label :content %><br />
+    			<%= f.text_area :content %>
+  			</div>
+  			<div class="field", style="display: none;">
+    			<%= f.label :open_group_id %><br />
+    			<%= f.number_field :open_group_id, :value => @open_group.id %>
+  			</div>
+  			<div class="field", style="display: none;">
+    			<%= f.label :user_id %><br />
+    			<%= f.number_field :user_id, :value => current_user.id %>
+  			</div>
+  			<div class="field">
+    			<%= f.file_field :attach %>
+  			</div>  
+  			<div class="actions">
+    			<%= f.submit %>
+  			</div>
+		<% end %>
+	<% end %>
+</div>
+ 
+<%= link_to 'Edit', edit_open_group_path(@open_group) %> |
+<%= link_to 'Back', open_groups_path %>

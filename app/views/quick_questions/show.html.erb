@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Question:</b>
+  <%= @quick_question.question %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @quick_question.user_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_quick_question_path(@quick_question) %> |
+<%= link_to 'Back', quick_questions_path %>

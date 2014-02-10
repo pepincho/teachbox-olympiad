@@ -1,0 +1,2 @@
+module ClosedGroupsHelper
+end

@@ -1,0 +1,29 @@
+<h1>Listing closed_group_posts</h1>
+
+<table>
+  <tr>
+    <th>Closed group</th>
+    <th>Content</th>
+    <th>User</th>
+    <th>Title</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @closed_group_posts.each do |closed_group_post| %>
+  <tr>
+    <td><%= closed_group_post.closed_group_id %></td>
+    <td><%= closed_group_post.content %></td>
+    <td><%= closed_group_post.user_id %></td>
+    <td><%= closed_group_post.title %></td>
+    <td><%= link_to 'Show', closed_group_post %></td>
+    <td><%= link_to 'Edit', edit_closed_group_post_path(closed_group_post) %></td>
+    <td><%= link_to 'Destroy', closed_group_post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Closed group post', new_closed_group_post_path %>
