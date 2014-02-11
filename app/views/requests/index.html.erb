@@ -1,5 +1,8 @@
-<% if current_user.present? 
+<% if current_user.present? %>
 
+
+
+<%
 	 @admin_groups = ClosedGroup.where(:admin_id => current_user.id)
 	 @admin_groups.each do |adm|
 	 	@requests = Request.where(:closed_group_id => adm.id)
@@ -14,12 +17,14 @@
 	 			<%= User.find(req.user_id).name %>
 	 		 </p>
 	 		 <br /><br /><br />
-			<%
+
+			<%= link_to "accept", {:controller => :requests, :action => :accept, :id => req.closed_group_id,  :del => req.id, :user_id => req.user_id }, {:method => :post } %>
+			<%= link_to "decline", {:controller => :requests, :action => :decline, :del => req.id }, {:method => :post } %>
+<%
 	 	end
 
 	 end
-
-	%>
+%>
 	
 
 

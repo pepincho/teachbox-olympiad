@@ -31,8 +31,7 @@ TeachboxNoit::Application.routes.draw do
 
   resources :open_groups
 
-  resources :requests
-
+  resources :requests 
 
   root to: 'menu#index'
   devise_for :users
@@ -59,6 +58,12 @@ TeachboxNoit::Application.routes.draw do
      post :join, :on => :collection
      post :like, :on => :collection
      post :like_post, :on => :collection
+  end
+
+
+  resources :requests do
+    post :accept, :on => :collection
+    post :decline, :on => :collection
   end
 
   # The priority is based upon order of creation:

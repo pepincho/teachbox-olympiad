@@ -4,8 +4,5 @@ class Course < ActiveRecord::Base
   has_many :user_courses
   has_many :course_posts
 
-   searchable do
-  	text :name, :boost => 5
-  	text :description
-  end
+  
 end
