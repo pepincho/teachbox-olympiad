@@ -4,4 +4,9 @@ class ClosedGroup < ActiveRecord::Base
   has_many :user_closed_group
   has_many :closed_group_posts
   has_many :requests
+
+  searchable do
+  	text :name, :boost => 5
+  	text :decription
+  end
 end

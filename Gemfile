@@ -28,7 +28,8 @@ gem "jquery-rails", "< 3.0.0"
 gem "paperclip", "~> 2.3"
 gem 'therubyracer', :platform => :ruby
 gem "cocaine", "= 0.3.2" 
-
+gem "sunspot_rails"
+gem "sunspot_solr"
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
