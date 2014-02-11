@@ -47,6 +47,17 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     @user = User.find(params[:id])
+    @userss = User.where("id = ?", params[:id])
+      @userss.each do |user| 
+            if current_user.present?
+              if user.id == current_user.id 
+                    @kartof = true
+                    break
+                else
+                    @kartof = false 
+                end
+            end
+        end
   end
 
   # POST /users
