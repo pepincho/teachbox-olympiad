@@ -1,31 +1,181 @@
 <% if current_user.present? %>
+<div class="topbar" style="margin-left: auto ;  margin-right: auto ; " >
+   <div class="left-pane" style="margin-top:10px;"> 
+ 	<nav>
+              <%    count = 0
+                    @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id 
+                          count += 1
+                        end
+                    end
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if
+                        count += 1
+                      end
+                    end
+                   @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id
+                        count += 1
+                      end
+                    end   
 
+                   if count != 0 %>
+                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
+                  <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                    <% @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id %>
+                          <li><%= link_to OpenGroup.find(a.open_group_id).name,  {:controller => :open_groups, :action => :show, :id => OpenGroup.find(a.open_group_id).id }, {:method => :get }  %>
+                          </li>
+                        <% end
+                    end
 
-<%
-	 @admin_groups = ClosedGroup.where(:admin_id => current_user.id)
-	 @admin_groups.each do |adm|
-	 	@requests = Request.where(:closed_group_id => adm.id)
-	 	@requests.each do |req|
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if current_user.id == b.user_id %>
+                         <li><%= link_to Course.find(b.course_id).name,  {:controller => :courses, :action => :show, :id => Course.find(b.course_id).id }, {:method => :get }  %>
+                          </li>
+                      <% end
+                    end
+
+                  @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id %>
+                        <li> <%= link_to ClosedGroup.find(c.closed_group_id).name,  {:controller => :closed_groups, :action => :show, :id => ClosedGroup.find(c.closed_group_id).id }, {:method => :get }  %>
+
+                         </li>
+                      <% end
+                    end %>
+                  </ul>
+                  <% end %>
+                </nav>
+                </div>
+
+		<div class="middle-pane"> 
+		 <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; ">
+								<button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white; margin-bottom: -1px;" > Заявки към твоите частни групи </button>
+						  
+								<table cellpadding="0" style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+									<tr>
+										<td  style=" border-bottom: 1px #ccc solid; border-right: 1px #ccc solid; width:40%; text-align:center;">
+											Името на Групата
+										</td>
+										<td  style=" border-bottom: 1px #ccc solid; border-right: 1px #ccc solid; width:40%; text-align:center;">
+											Името на кандидата
+									    </td> 
+										<td colspan="2" style=" border-bottom: 1px #ccc solid; width:20%; text-align:center;">
+										    Твоят избор
+										</td>
+									</tr>
+		<%
+			 count = 0
+			 @admin_groups = ClosedGroup.where(:admin_id => current_user.id)
+			 @admin_groups.each do |adm|
+			 	@requests = Request.where(:closed_group_id => adm.id)
+			 	@requests.each do |req|
+			 		count += 1
 	 		%>
-	 		<p> imeto na grupata: 
-	 		<br />
-	 			<%= ClosedGroup.find(req.closed_group_id).name %>
-	 			<br /><br />
-	 			imeto na 4oveka: 
-	 			<br />
-	 			<%= User.find(req.user_id).name %>
-	 		 </p>
-	 		 <br /><br /><br />
+							
 
-			<%= link_to "accept", {:controller => :requests, :action => :accept, :id => req.closed_group_id,  :del => req.id, :user_id => req.user_id }, {:method => :post } %>
-			<%= link_to "decline", {:controller => :requests, :action => :decline, :del => req.id }, {:method => :post } %>
+									<tr>
+										<td  style=" border-bottom: 1px #ccc solid;border-right: 1px #ccc solid; width:40%; text-align:center;">
+											<h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;"><%= ClosedGroup.find(req.closed_group_id).name %></h5>
+										</td>
+										<td  style=" border-bottom: 1px #ccc solid;border-right: 1px #ccc solid; width:40%; text-align:center;">
+											<h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;"> <%= User.find(req.user_id).name %> </h5>
+									    </td> 
+										<td  style=" border-bottom: 1px #ccc solid; width:10%; text-align:center;">
+										  <%= link_to image_tag("accept3.png", :style => "width:90%; height:auto;"), {:controller => :requests, :action => :accept, :id => req.closed_group_id,  :del => req.id, :user_id => req.user_id }, {:method => :post } %>
+								
+										</td>
+										<td  style=" border-bottom: 1px #ccc solid; width:10%; text-align:center;">
+										<%= link_to image_tag("cancel4.png", :style => "width:70%; height:auto;"), {:controller => :requests, :action => :decline, :del => req.id }, {:method => :post } %>
+								
+										</td>
+									</tr>
 <%
 	 	end
 
 	 end
-%>
-	
+	 if count == 0 %>
+	 	<tr>
+			<td colspan="3" style="height:50px; border-bottom: 1px #ccc solid;border-right: 1px #ccc solid; width:100%; text-align:center; color:black; font-size: 20px;">
+					Няма нови заявки за присъединяване към частните Ви групи			
+			</td>
+		</tr>
 
+<% end %>
+						</table>
+					</div>
+	</div>
 
+   <div class="right-pane"> 
+        <nav>
+              <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси</button>
+                                    <li><a href="#_push">Push button</a></li>
+                                    <li><a href="#_command">Command button</a></li>
+                                    <li><a href="#_toolbar">Tool bar</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+              </ul>
+        </nav>
 
+        <nav>
+              
+                <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
+                    <% opens = OpenGroup.all
+                    limit = 0;
+                    opens.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :open_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                    <% cors = Course.all
+                    limit = 0;
+                    cors.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :courses, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+
+                    <% close = ClosedGroup.all
+                    limit = 0;
+                    close.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :closed_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                  
+                 </ul>
+        </nav>
+
+      </div>
+      </div>
+
+	   
 <% end %>

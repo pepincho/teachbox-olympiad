@@ -47,7 +47,9 @@
             </div>
             
             <span class="element-divider place-right"></span>
-              <a class="element place-right" href="#"><span class="icon-bell"></span></a>
+              <%= link_to requests_path, :class => "element place-right" do %>
+              <span class="icon-bell">
+              <% end %>
             
             <%= link_to({:controller => :users, :action => :show, :id => current_user.id }, {:method => :get }) do %>
             <span class="element-divider place-right"></span>
