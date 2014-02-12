@@ -27,7 +27,8 @@ TeachboxNoit::Application.routes.draw do
 
 
   resources :open_group_posts
-
+  
+  resources :searches
 
   resources :open_groups
 
