@@ -56,14 +56,16 @@ class UsersController < ApplicationController
                 else
                     @kartof = false 
                 end
-            end
+            end 
         end
+
   end
 
   # POST /users
   # POST /users.json
   def create
     @user = User.new(params[:user])
+
 
     respond_to do |format|
       if @user.save
@@ -83,8 +85,9 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { head :no_content }
+        sign_out(@user)
+        sign_in(@user, :bypass => true)
+        format.html { redirect_to @user}
       else
         format.html { render action: "edit" }
         format.json { render json: @user.errors, status: :unprocessable_entity }

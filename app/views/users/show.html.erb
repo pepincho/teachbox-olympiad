@@ -19,7 +19,8 @@
 <br /><br />
 <% if @user.pic.exists? %>
 	<%= image_tag @user.pic.url(), :style => "width:300px; height:300px;"%> <br /><br /><br />
-
+<% else %>
+	<%= image_tag("default.jpg", :style => "width:300px; height:300px;") %> <br /><br /><br />
 <% end %>
 <br />
 <% if current_user.present? && @kartof %>

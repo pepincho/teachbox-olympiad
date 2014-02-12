@@ -8,8 +8,9 @@ class User < ActiveRecord::Base
   attr_accessible :email, :name, :password, :attach, :pic
   validates :name, :presence => true    
   validates :email, :presence => true
+  validates :password, :presence => true
 
-  has_attached_file :pic
+  has_attached_file :pic, :default_url => "/images/default.jpg"
   has_attached_file :attach
 
   has_many :user_open_group

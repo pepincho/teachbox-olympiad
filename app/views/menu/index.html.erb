@@ -18,7 +18,27 @@
                   <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;">Задай въпрос</button>
        <% end %>
         <nav>
-              
+              <%    count = 0
+                    @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id 
+                          count += 1
+                        end
+                    end
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if
+                        count += 1
+                      end
+                    end
+                   @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id
+                        count += 1
+                      end
+                    end   
+
+                   if count != 0 %>
                  <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
                   <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
                     <% @your_opens = UserOpenGroup.all
@@ -46,7 +66,9 @@
                       <% end
                     end %>
                   </ul>
+                  <% end %>
                 </nav>
+
 
       </div>
       <div class="middle-pane"> 
