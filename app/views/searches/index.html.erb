@@ -1,62 +1,202 @@
-<% if current_user.present? 
-		oGroups = Array.new
-		coGroups = Array.new
-		clGroups = Array.new
+
+
+
+<div class="topbar" style="margin-left: auto ;  margin-right: auto ;" >
+                        <div class="left-pane">
+                                <nav>
+              <%    count = 0
+                    @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id 
+                          count += 1
+                        end
+                    end
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if  current_user.id == b.user_id
+                        count += 1
+                      end
+                    end
+                   @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id
+                        count += 1
+                      end
+                    end   
+
+                   if count != 0 %>
+                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
+                  <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                    <% @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id %>
+                          <li><%= link_to OpenGroup.find(a.open_group_id).name,  {:controller => :open_groups, :action => :show, :id => OpenGroup.find(a.open_group_id).id }, {:method => :get }  %>
+                          </li>
+                        <% end
+                    end
+
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if current_user.id == b.user_id %>
+                         <li><%= link_to Course.find(b.course_id).name,  {:controller => :courses, :action => :show, :id => Course.find(b.course_id).id }, {:method => :get }  %>
+                          </li>
+                      <% end
+                    end
+
+                  @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id %>
+                        <li> <%= link_to ClosedGroup.find(c.closed_group_id).name,  {:controller => :closed_groups, :action => :show, :id => ClosedGroup.find(c.closed_group_id).id }, {:method => :get }  %>
+
+                         </li>
+                      <% end
+                    end %>
+                  </ul>
+                  <% end %>
+                </nav>
+</div>
+
+<div class="middle-pane"> 
+        <% if current_user.present? %>
+        <%      oGroups = Array.new
+                coGroups = Array.new
+                clGroups = Array.new
         @openResults.each do |b|
-        	  oGroups.push(b.id)
-        	  %>
+                  oGroups.push(b.id)
+                  %>
 
-        	  <%= b.name %>
+                  <%= b.name %>
 
-        	  <%
+                  <%
         end
         @courseResults.each do |b|
-        	coGroups.push(b.id)
-        	  %>
+                coGroups.push(b.id)
+                  %>
 
-        	  <%= b.name %>
+                  <%= b.name %>
 
-        	  <%
+                  <%
         end
         @closedResults.each do |b|
-        	clGroups.push(b.id)
-        	  %>
+                clGroups.push(b.id)
+                  %>
 
-        	  <%= b.name %>
+                  <%= b.name %>
 
-        	  <%
+                  <%
         end
 
         @openDesResults.each do |b|
-        	if !oGroups.include?(b.id)
-        	  %>
+                if !oGroups.include?(b.id)
+                  %>
 
-        	  <%= b.name %>
+                  <%= b.name %>
 
-        	  <%
-        	end
+                  <%
+                end
         end
         @courseDesResults.each do |b|
-        	if !coGroups.include?(b.id)
-        	  %>
+                if !coGroups.include?(b.id)
+                  %>
 
-        	  <%= b.name %>
+                  <%= b.name %>
 
-        	  <%
-        	end
+                  <%
+                end
         end
         @closedDesResults.each do |b|
-        	if !clGroups.include?(b.id)
-        	  %>
+                if !clGroups.include?(b.id)
+                  %>
 
-        	  <%= b.name %>
+                  <%= b.name %>
 
-        	  <%
-        	end
+                  <%
+                end
         end
 
-	%>
+        %>
+        <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; ">
+                <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;  " > Резултати от търсенето </button>
+  
+                <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+                        <tr>
+                                <td  style=" border-bottom: 1px #ccc solid; width:30%; text-align:center;">
+                                        <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;">
+                                                Името на групата</h5>
+                                        <img src="imgs/thumbs23.png" style="width: 21px; height: 25px; padding-bottom:7px;" > &nbsp;<span style="font-size: 15px;">120</span>
+                                        <br />
+                                        <img src="imgs/group4.png" style="width: 30px; height: 25px; padding-bottom:7px;" > &nbsp;<span style="font-size: 15px;">120</span>
+                                </td>
+                                <td  style=" border-bottom: 1px #ccc solid; width:70%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                                        <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                                        asddd ddddddd ddddddd ddddddddd dddd dddddddd ad
+                                </td> 
+                        </tr>
+                </table>
+        </div>
+        <% end %>        
+</div>
 
-	
+<div class="right-pane"> 
+        <nav>
+              <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси</button>
+                                    <li><a href="#_push">Push button</a></li>
+                                    <li><a href="#_command">Command button</a></li>
+                                    <li><a href="#_toolbar">Tool bar</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+              </ul>
+        </nav>
 
-<% end %>
+        <nav>
+              
+                <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
+                    <% opens = OpenGroup.all
+                    limit = 0;
+                    opens.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :open_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                    <% cors = Course.all
+                    limit = 0;
+                    cors.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :courses, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+
+                    <% close = ClosedGroup.all
+                    limit = 0;
+                    close.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :closed_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                  
+                 </ul>
+        </nav>
+</div>
+</div>
