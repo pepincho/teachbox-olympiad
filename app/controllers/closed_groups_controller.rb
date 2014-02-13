@@ -91,6 +91,12 @@ end
          user_join.user_id = current_user.id
          user_join.closed_group_id = @closed_group.id
          user_join.save
+
+         user_like = LikesClosedGroup.new
+         user_like.user_id = current_user.id
+         user_like.closed_group_id = @closed_group.id
+         user_like.save
+
         format.html { redirect_to @closed_group, notice: 'Closed group was successfully created.' }
         format.json { render json: @closed_group, status: :created, location: @closed_group }
       else
@@ -166,5 +172,16 @@ end
       end
    end
 
+   def like_comment
+    like_comment = LikesCommentsClosedGroupPost.new
+    like_comment.user_id = current_user.id
+    like_comment.comments_closed_group_post_id = params[:id]
+    like_comment.save
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      # format.json { head :no_content }
+    end
+  end
    
 end

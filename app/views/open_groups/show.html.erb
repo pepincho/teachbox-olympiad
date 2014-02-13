@@ -18,7 +18,7 @@
 <% if current_user.present? && !@pesho %>
 	<%= link_to "Join", {:controller => :open_groups, :action => :join, :id => @open_group.id }, {:method => :post } %>
 <% end %>
-<% if current_user.present? && !@ivan && @pesho %>
+<% if current_user.present? && !@ivan && !@pesho %>
 	<%= link_to "Like", {:controller => :open_groups, :action => :like, :id => @open_group.id }, {:method => :post } %>
 <% end %>
 
@@ -111,8 +111,7 @@
   		<br />
   		<% @comments.each do |comments| %>
         <% likescomment = LikesCommentsOpenGroupPost.where("comments_open_group_post_id = ?", comments.id) %>
-        <% 
-          likescomment.each do |user| 
+        <% likescomment.each do |user| 
             if current_user.present?
               if user.user_id == current_user.id 
                 @patka = true
@@ -121,8 +120,7 @@
                 @patka = false 
               end
             end
-          end
-        %>
+          end %>
     		<%= User.find(comments.user_id).name %>:
     		<%= comments.content %> | 
         <%= likescomment.length %> | 

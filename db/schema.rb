@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140213155555) do
+ActiveRecord::Schema.define(:version => 20140213164117) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "namespace"
@@ -69,11 +69,11 @@ ActiveRecord::Schema.define(:version => 20140213155555) do
   end
 
   create_table "comments_closed_group_posts", :force => true do |t|
-    t.integer  "closed_group_id"
+    t.integer  "closed_group_post_id"
     t.text     "content"
     t.integer  "user_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
 
   create_table "comments_course_posts", :force => true do |t|
@@ -127,6 +127,20 @@ ActiveRecord::Schema.define(:version => 20140213155555) do
     t.integer  "user_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+  end
+
+  create_table "likes_comments_closed_group_posts", :force => true do |t|
+    t.integer  "comments_closed_group_post_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  create_table "likes_comments_course_posts", :force => true do |t|
+    t.integer  "comments_course_post_id"
+    t.integer  "user_id"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "likes_comments_open_group_posts", :force => true do |t|

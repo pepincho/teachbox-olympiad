@@ -73,6 +73,12 @@ class OpenGroupsController < ApplicationController
          user_join.user_id = current_user.id
          user_join.open_group_id = @open_group.id
          user_join.save
+
+         user_like = LikesOpenGroup.new
+         user_like.user_id = current_user.id
+         user_like.open_group_id = @open_group.id
+         user_like.save
+
         format.html { redirect_to @open_group, notice: 'Open group was successfully created.' }
         format.json { render json: @open_group, status: :created, location: @open_group }
       else

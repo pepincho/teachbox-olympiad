@@ -23,7 +23,7 @@
 <% if current_user.present? && !@pesho1 %>
 	<%= link_to "Join", {:controller => :courses, :action => :join, :id => @course.id }, {:method => :post } %>
 <% end %>
-<% if current_user.present? && !@ivan1  && @pesho1 %>
+<% if current_user.present? && !@ivan1  && !@pesho1 %>
 	<%= link_to "Like", {:controller => :courses, :action => :like, :id => @course.id }, {:method => :post } %>
 <% end %>
 
@@ -104,11 +104,30 @@
 			<% end %>
 		<% end %>
 		<br />
-		<% @comments.each do |comments| %>
-			<%= User.find(comments.user_id).name %>:
-			<%= comments.content %>
-			<br />
-		<% end %>
+		
+  <% @comments.each do |comments| %>
+        <% likescomment = LikesCommentsCoursePost.where("comments_course_post_id = ?", comments.id) %>
+        <% likescomment.each do |user| 
+            if current_user.present?
+              if user.user_id == current_user.id 
+                @patka = true
+                break
+              else
+                @patka = false 
+              end
+            end
+          end %>
+        <%= User.find(comments.user_id).name %>:
+        <%= comments.content %> | 
+        <%= likescomment.length %> | 
+        <% if current_user.present? && !@patka %>
+          <%= link_to "Like", {:controller => :courses, :action => :like_comment, :id => comments.id }, {:method => :post } %>
+        <% end %>
+        <br />
+       
+      <% end %>
+
+
 	<% end %>
 </p>
 

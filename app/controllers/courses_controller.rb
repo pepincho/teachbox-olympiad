@@ -83,6 +83,12 @@ end
          user_join.user_id = current_user.id
          user_join.course_id = @course.id
          user_join.save
+
+         user_like = LikesCourse.new
+         user_like.user_id = current_user.id
+         user_like.course_id = @course.id
+         user_like.save
+
         format.html { redirect_to @course, notice: 'Course was successfully created.' }
         format.json { render json: @course, status: :created, location: @course }
       else
@@ -159,5 +165,18 @@ end
       format.html { redirect_to '/courses/'+user.course_id.to_s }
         # format.json { head :no_content }
     end
-  end 
+  end
+
+  def like_comment
+    like_comment = LikesCommentsCoursePost.new
+    like_comment.user_id = current_user.id
+    like_comment.comments_course_post_id = params[:id]
+    like_comment.save
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      # format.json { head :no_content }
+    end
+  end
+
 end
