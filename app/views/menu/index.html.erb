@@ -27,7 +27,7 @@
                     end
                   @yours_courses = UserCourse.all
                     @yours_courses.each do |b|
-                      if
+                      if  current_user.id == b.user_id
                         count += 1
                       end
                     end

@@ -25,6 +25,7 @@ class OpenGroupPostsController < ApplicationController
   # GET /open_group_posts/new.json
   def new
     @open_group_post = OpenGroupPost.new
+    
 
     respond_to do |format|
       format.html # new.html.erb

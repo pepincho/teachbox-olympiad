@@ -1,11 +1,58 @@
 <% if current_user.present? 
-
+		oGroups = Array.new
+		coGroups = Array.new
+		clGroups = Array.new
         @openResults.each do |b|
+        	  oGroups.push(b.id)
         	  %>
 
         	  <%= b.name %>
 
         	  <%
+        end
+        @courseResults.each do |b|
+        	coGroups.push(b.id)
+        	  %>
+
+        	  <%= b.name %>
+
+        	  <%
+        end
+        @closedResults.each do |b|
+        	clGroups.push(b.id)
+        	  %>
+
+        	  <%= b.name %>
+
+        	  <%
+        end
+
+        @openDesResults.each do |b|
+        	if !oGroups.include?(b.id)
+        	  %>
+
+        	  <%= b.name %>
+
+        	  <%
+        	end
+        end
+        @courseDesResults.each do |b|
+        	if !coGroups.include?(b.id)
+        	  %>
+
+        	  <%= b.name %>
+
+        	  <%
+        	end
+        end
+        @closedDesResults.each do |b|
+        	if !clGroups.include?(b.id)
+        	  %>
+
+        	  <%= b.name %>
+
+        	  <%
+        	end
         end
 
 	%>
