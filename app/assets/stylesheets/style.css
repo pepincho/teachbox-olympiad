@@ -7,6 +7,36 @@ padding:0;
 color:grey;
 }
 
+.lol > a:first-child:link { color: white !important; }
+.lol > a:first-child:visited { color: white !important; }
+.lol > a:first-child:hover { color: white !important; }
+.lol > a:first-child:active { color: white !important; }
+
+
+#test {
+    position: relative;
+    
+}
+
+#test .wrapper {
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    z-index: 2;
+
+}
+
+#test .wrapper:hover {
+    opacity: 0;
+}
+
+#test button {
+    position: relative;
+    top: 0;
+    z-index: 1;
+}
+
 #table {
   border-collapse: collapse;
   border-spacing: 0;

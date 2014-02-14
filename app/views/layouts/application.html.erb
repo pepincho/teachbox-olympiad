@@ -35,7 +35,7 @@
           
          </div>
          
-                <div class="element place-right">
+            <div class="element place-right">
               <a class="dropdown-toggle" href="#">
                 <span class="icon-cog"></span>
               </a>
@@ -53,13 +53,16 @@
             
             <%= link_to({:controller => :users, :action => :show, :id => current_user.id }, {:method => :get }) do %>
             <span class="element-divider place-right"></span>
-            <button class="element image-button image-left place-right" style="width:auto; padding-right: 12px;">
+            <button class="element image-button image-left place-right" style="width:auto; padding: 5px; padding-right: 12px; ">
               <font style="font-size:20px; color: white; "> 
                <%= current_user.name  %>
               </font>
               <% @user = User.find(current_user.id) %>
-              <%= image_tag @user.pic.url() %>
+             
             </button>
+             <button class="element image-button image-left place-right" style="width:auto; padding-right: 12px;">
+             <%= image_tag @user.pic.url(), :style => "width:auto;" %>
+              </button>
             <% end %>
       </nav>
      </div>

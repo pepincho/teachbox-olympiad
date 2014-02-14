@@ -1,179 +1,438 @@
-<p id="notice"><%= notice %></p>
+<div class="topbar" style="margin-left: auto;  margin-right: auto;" >
+      <div class="left-pane"> 
+        <div style="border: 1px #ccc solid; margin-top:20px;">
+          <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;">
+            <%= @open_group.name %>
+          </button>
+          <div style="padding:10px; border-bottom:1px #ccc solid; ">
+            <%= @open_group.description %>
+          </div>
+          <div style="padding:10px; margin-left: -10px; padding-top:10px; padding-bottom:6px ">
+            <table style="width:100%; ">
+            <tr>
+              <td style="width:50%; text-align: center;">
+                <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;") %> &nbsp;<span style="font-size: 15px;"><%= @likes.length %></span>
+              </td>
+              <td style="width:50%; text-align: center;">
+                <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;") %> &nbsp;<span style="font-size: 15px;">
+                <% counter = 0 %>
+                <% @usersname.each do |user| %>
+                  <% counter += 1 %>
+                <% end %>
+                <%= counter %></span>
+              </td>
+            </tr>
+            </table>
+            
+            
+          </div>
+          
+        </div>
+        <div style="text-align: center;">
+          <% if current_user.present? && !@pesho %>
+            <button class="large" style="width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ">
+              <%= link_to "Влез", {:controller => :open_groups, :action => :join, :id => @open_group.id }, {:method => :post } %>
+            </button>
+          <% end %>
+          <% if current_user.present? && !@ivan && @pesho %>
+            <button class="large" style="width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ">
+              <%= link_to "Харесай", {:controller => :open_groups, :action => :like, :id => @open_group.id }, {:method => :post } %>
+            </button>
+          <% end %>
+          
+        </div>
+        <nav>
+              <%    count = 0
+                    @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id 
+                          count += 1
+                        end
+                    end
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if
+                        count += 1
+                      end
+                    end
+                   @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id
+                        count += 1
+                      end
+                    end   
 
-<p>
-  <b> Likes: </b>
-  <%= @likes.length %>
-</p>
+                   if count != 0 %>
+                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
+                  <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                    <% @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id %>
+                          <li><%= link_to OpenGroup.find(a.open_group_id).name,  {:controller => :open_groups, :action => :show, :id => OpenGroup.find(a.open_group_id).id }, {:method => :get }  %>
+                          </li>
+                        <% end
+                    end
 
-<p>
-  <b> Name: </b>
-  <%= @open_group.name %>
-</p>
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if current_user.id == b.user_id %>
+                         <li><%= link_to Course.find(b.course_id).name,  {:controller => :courses, :action => :show, :id => Course.find(b.course_id).id }, {:method => :get }  %>
+                          </li>
+                      <% end
+                    end
 
-<p>
-  <b> Description: </b>
-  <%= @open_group.description %>
-</p>
+                  @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id %>
+                        <li> <%= link_to ClosedGroup.find(c.closed_group_id).name,  {:controller => :closed_groups, :action => :show, :id => ClosedGroup.find(c.closed_group_id).id }, {:method => :get }  %>
 
-<% if current_user.present? && !@pesho %>
-	<%= link_to "Join", {:controller => :open_groups, :action => :join, :id => @open_group.id }, {:method => :post } %>
-<% end %>
-<% if current_user.present? && !@ivan && !@pesho %>
-	<%= link_to "Like", {:controller => :open_groups, :action => :like, :id => @open_group.id }, {:method => :post } %>
-<% end %>
+                         </li>
+                      <% end
+                    end %>
+                  </ul>
+                  <% end %>
+                </nav>
 
-<p>	
-<b> Users: </b> <br />
-	<% @usersname.each do |user| %>
-        <%= user %>
-		<br />
-	<% end %>
-</p>
+      </div>
+
+   <!-- ---------------------------------------------READY-------------------------------------------------------------- -->
+
+      <div class="middle-pane"> 
+          <div style="width:95%; margin-top:21px; margin-left:auto; margin-right: auto; text-align: center;">
+           <table cellspacing="0" cellpadding="0" style=" width:100%; margin-left:auto; margin-right: auto;">
+                  <% if current_user.present? && @pesho %>
+                    <%= form_for(OpenGroupPost.new) do |f| %>
+                      <% if OpenGroupPost.new.errors.any? %>
+                        <div id="error_explanation">
+                          <h2> <%= pluralize(OpenGroupPost.new.errors.count, "error") %> prohibited this open_group_post from being saved: </h2>
+                          <ul>
+                            <% OpenGroupPost.new.errors.full_messages.each do |msg| %>
+                              <li> <%= msg %> </li>
+                            <% end %>
+                          </ul>
+                        </div>
+                      <% end %>
+                    <div class="input-control text" style="margin:0; margin-bottom:-4px;">
+                      <%= f.text_field :title, :style => 'height:30px;', :class => 'center-placeholder', :placeholder => 'Заглавие'  %>
+                      <button class="btn-clear"></button>
+                    </div>
+                    <div class="input-control textarea" style="margin:0;">
+                      <%= f.text_area :content, :style => 'height: 80px; min-height:0px;', :placeholder => 'Въведете информация по темата...' %>
+                    </div>
+                    <div class="field", style="display: none;">
+                      <%= f.label :open_group_id %><br />
+                      <%= f.number_field :open_group_id, :value => @open_group.id %>
+                    </div>
+                    <div class="field", style="display: none;">
+                      <%= f.label :user_id %><br />
+                      <%= f.number_field :user_id, :value => current_user.id %>
+                    </div>   
+                  <tr>
+                    <td style="width:50%;">
+                      <button type="submit", style="height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white; margin-left:auto; margin-right: auto;"> Публикувай </button>
+                    </td>
+
+                    <td style="width:50%;">
+
+                        <div id="test">
+                          <div class="wrapper">
+                             <%= f.file_field :attach  %>
+                          </div>
+                          <button style="height: 30px; width:100%; background-color:#333; font-weight: bold; text-align:center; color:white;" > Прикачи файл  </button>
+                        </div>
+
+
+                    </td>
+                  </tr>
+                  <% end %>
+                  <% end %>
+                </table>
+              </div>
   
-<b> Posts: </b><br />
-<p>
-<%  @neshto.each do |post| 
-    	@martin = false
-    	some = LikesOpenGroupPost.where("open_group_post_id = ?", post.id) 
-    	@comments = CommentsOpenGroupPost.where("open_group_post_id = ?", post.id) 
+<div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; margin-bottom: 300px; ">
+        <%  linkTo = 1
+            @neshto.each do |post| 
+              @martin = false
+              some = LikesOpenGroupPost.where("open_group_post_id = ?", post.id) 
+              @comments = CommentsOpenGroupPost.where("open_group_post_id = ?", post.id) 
 
-    		some.each do |user| 
-           		if current_user.present?
-            		if user.user_id == current_user.id 
-               			@martin = true
-               			break
-            		else
-               			@martin = false 
-            		end
-           		end
-      		end
+                some.each do |user| 
+                      if current_user.present?
+                        if user.user_id == current_user.id 
+                            @martin = true
+                            break
+                        else
+                            @martin = false 
+                        end
+                      end
+                  end
 
-      	@izch =  LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 1).length 
-      	@pol =   LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 2).length
-      	@lub =   LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 3).length
-      	@nezad = LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 4).length
-%>
-		<%= post.title %>
-		<br />
-        <%= post.content %>
-        <br />
-        <% if post.attach.exists? %>
-        	<a href="<%= post.attach.url %> "> <b> File attached </b> </a>
-        <% end %>
-        <br />
+                @izch =  LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 1).length 
+                @pol =   LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 2).length
+                @lub =   LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 3).length
+                @nezad = LikesOpenGroupPost.where("open_group_post_id = ? AND like_attribute = ?", post.id, 4).length
+        %>
 
-        <% if current_user.present? && !@martin && @pesho %>
-  			<%= link_to "Изчерпателно", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 1 }, {:method => :post } %>
-  			<%= link_to "Полезно", {:controller => :open_groups, :action => :like_post, :id => post.id , :value => 2  }, {:method => :post } %>
-  			<%= link_to "Любопитно", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 3  }, {:method => :post } %>
-  			<%= link_to "Незадоволително", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 4  }, {:method => :post } %>
-  		<% else %>
-  			Изчерпателно Полезно Любопитно Незадоволително
-  		<% end %>
- 		<br />
-  		<%= @izch %> 
-  		<%= @pol %> 
-  		<%= @lub %>
-  		<%= @nezad %>
-  		<br />
-----------------------------------------------
-  		<%= form_for(CommentsOpenGroupPost.new) do |f| %>
-  			<% if CommentsOpenGroupPost.new.errors.any? %>
-    			<div id="error_explanation">
-      				<h2> <%= pluralize(CommentsOpenGroupPost.new.errors.count, "error") %> prohibited this comments_open_group_post from being saved: </h2>
-      				<ul>
-      					<% CommentsOpenGroupPost.new.errors.full_messages.each do |msg| %>
-        					<li> <%= msg %> </li>
-      					<% end %>
-      				</ul>
-    			</div>
-  			<% end %>
 
-  			<% if current_user.present? %>
-  				<div class="field">
-    				<%= f.label :content %><br />
-    				<%= f.text_area :content %>
-  				</div>
-  				<div class="field", style="display: none;">
-    				<%= f.label :user_id %><br />
-    				<%= f.number_field :user_id, :value => current_user.id %>
-  				</div>
-  				<div class="field", style="display: none;">
-    				<%= f.label :open_group_post_id %><br />
-    				<%= f.number_field :open_group_post_id, :value => post.id %>
-  				</div>
-  				<div class="actions">
-    				<%= f.submit %>
-  				</div>
-			<% end %>
-  		<% end %>
 
-  		<br />
-  		<% @comments.each do |comments| %>
-        <% likescomment = LikesCommentsOpenGroupPost.where("comments_open_group_post_id = ?", comments.id) %>
-        <% likescomment.each do |user| 
-            if current_user.present?
-              if user.user_id == current_user.id 
-                @patka = true
-                break
-              else
-                @patka = false 
-              end
-            end
-          end %>
-    		<%= User.find(comments.user_id).name %>:
-    		<%= comments.content %> | 
-        <%= likescomment.length %> | 
-        <% if current_user.present? && !@patka %>
-          <%= link_to "Like", {:controller => :open_groups, :action => :like_comment, :id => comments.id }, {:method => :post } %>
-        <% end %>
-    		<br />
-       
-  		<% end %>
+              
+              
+                <table border="1px" style="width:100%" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td rowspan="2" style="width:70px; height:70px;">
+                         <%= image_tag User.find(post.user_id).pic.url(), :style => "width:100%; height:auto;" %>
+                    </td>
+                    <td class="details" colspan="3" style="color:black; font-size:20px; padding:0;">
+                        <button class="button span_5_of_5 " style="height: 100%; margin:0; padding: 0; font-size: 22px; background-color:#2e92cf; color: white; border:0px; font-weight: bold; margin-top:-2px;"><%= post.title %></button>
+                    </td>
+                  </tr>
+                  <tr >
+                    <td class="details" colspan="3" style="color:black; font-size:20px; padding:0px;">
+                        от <%= User.find(post.user_id).name %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" style="padding: 10px;">
+                               <%= post.content %>
+                    </td>
+                  </tr>
+                  </table>
+
+                  <table style="width:100%" cellspacing="0" cellpadding="0">
+                    <tr style=" height: 30px;">
+                     <% if current_user.present? && !@martin && @pesho %>
+                  
+                      <td style="width: 25%; height: 30px;" >
+                      <%= button_to "Изчерпателно", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 1 }, { :style => "height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white; "} %>
+                      </td>
+                      <td style="width: 25%; height: 30px;">
+                      <%= button_to "Полезно", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 2 }, { :style => "height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white; "} %>
+                      </td>
+                      <td style="width: 25%; height: 30px;">
+                      <%= button_to "Любопитно", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 3 }, { :style => "height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white; "} %>
+                      </td>
+                      <td style="width: 25%; height: 30px;">
+                       <%= button_to "Непълно", {:controller => :open_groups, :action => :like_post, :id => post.id, :value => 4 }, { :style => "height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white; "} %>
+                      </td>
+
+                       <% else %>
+
+                        <td style="width: 25%;" >
+                        <button  style="height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white;  " > Изчерпателно </button>          
+                      </td>
+                      <td style="width: 25%;">
+                        <button  style="height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white;  " > Полезно </button>        
+                      </td>
+                      <td style="width: 25%; ">
+                        <button  style="height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white;  " > Любопитно </button> 
+                      </td>
+                      <td style="width: 25%; ">
+                        <button  style="height: 30px; width:100%; background-color:#333; font-weight: bold; text-align:center; color:white;  " > Непълно </button>  
+                      </td>
+
+                      <% end %>    
+                    </tr>
+                  </table>
+                  <table style="width:100%" cellspacing="0" cellpadding="0"  border="1px">
+                    <tr>
+                      <td style="text-align:center; width: 25%; height:30px;">
+                        <%= @izch %> 
+                      </td>
+                      <td style="text-align:center; width: 25%; height:30px;">
+                        <%= @pol %> 
+                      </td>
+                      <td style="text-align:center; width: 25%; height:30px;">
+                        <%= @lub %>
+                      </td>
+                      <td style="text-align:center; width: 25%; height:30px;">
+                        <%= @nezad %>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <div class="tab-control" data-role="tab-control" style="border: 1px black solid; margin-top: -1px; margin-bottom:40px;">
+                    <ul class="tabs" >
+                      <li class="active" style="margin-left:0px;"><a href="#_page_<%= linkTo %>" style=" border-top: 0px;">Прикачени файлове</a></li>
+                      <% linkTo += 1 %>
+                      <li ><a href="#_page_<%= linkTo %>" style="border-top: 0px;" >Вижте коментарите</a></li>
+                      <% linkTo += 1 %>
+                      <li><a href="#_page_<%= linkTo %>" style="border-top: 0px;">Дайте мнението си</a></li>
+                       <% linkTo -= 2 %>
+                      </ul>
+                   
+                    <div class="frames" >
+                      <div class="frame" id="_page_<%= linkTo %>" style="text-align: center" >
+                      <% linkTo += 1 %>
+                         <% if post.attach.exists? %>
+                            <a href="<%= post.attach.url %> "> <b> File attached </b> </a>
+                          <% else %>
+                               Този пост няма прикачени файлове !
+                          <% end %>
+                      </div>
+                      <div class="frame" id="_page_<%= linkTo %>">
+                      <% linkTo += 1 %>
+                        <table style="width:100%;" cellpadding="5">
+
+                        <% counterCom = 0
+                         @comments.each do |comments|
+                          counterCom += 1
+                          @patka = false
+                         %>
+                            <% likescomment = LikesCommentsOpenGroupPost.where("comments_open_group_post_id = ?", comments.id) %>
+                            <% likescomment.each do |user| 
+                                if current_user.present?
+                                  if user.user_id == current_user.id 
+                                    @patka = true
+                                    break
+                                  else
+                                    @patka = false 
+                                  end
+                                end
+                              end %>                            
+
+                        <tr>
+                          <td style="text-align:center;">
+
+                            <%= image_tag User.find(comments.user_id).pic.url(), :style => "width:60px; height:50px;" %>
+
+                          </td>
+                          <td style="width:84%;">
+                            <div class="notice" style="padding-bottom: 10px; padding-top: 10px;">
+                              <div class="fg-white" style="font-size:14px;">
+                                <div class="lol" style="text-align: center; margin-top:-6px; font-size: 16px;"> 
+                                  <%= link_to User.find(comments.user_id).name, {:controller => :users, :action => :show, :id => comments.user_id }, {:method => :get } %>
+                                  <hr style="margin:0; padding:0; margin-top:5px; margin-bottom: 5px;">
+                                </div>
+                                <%= comments.content %>
+
+                              </div>
+                            </div>
+                          </td>
+                          <td style="width:6%; text-align: center;">
+                            <% if current_user.present? && !@patka %>
+                              <%= link_to image_tag("thumbs23.png", :style => "width: 26px; height: 30px; padding-bottom:7px;" ), {:controller => :open_groups, :action => :like_comment, :id => comments.id }, {:method => :post } %>
+                            <% else %>
+                              <%=  image_tag("thumbs23.png", :style => "width: 26px; height: 30px; padding-bottom:7px;" ) %>
+                            <% end %>
+                            <br />
+                            <font style="font-size: 18px;"> <%= likescomment.length %> </font>
+                          </td>
+                        </tr>
+                        <% end %>
+                         <% if counterCom == 0 %>
+                        <div style="width:100%; text-align:center;">
+                           Този пост все още няма налични коментари!
+                        </div>
+                        <% end %>
+                        </table>
+                       
+                      </div>
+                      <div class="frame" id="_page_<%= linkTo %>" >
+                      <% linkTo += 1 %>
+                      <%= form_for(CommentsOpenGroupPost.new) do |f| %>
+                        <% if CommentsOpenGroupPost.new.errors.any? %>
+                          <div id="error_explanation">
+                              <h2> <%= pluralize(CommentsOpenGroupPost.new.errors.count, "error") %> prohibited this comments_open_group_post from being saved: </h2>
+                              <ul>
+                                <% CommentsOpenGroupPost.new.errors.full_messages.each do |msg| %>
+                                  <li> <%= msg %> </li>
+                                <% end %>
+                              </ul>
+                          </div>
+                        <% end %>
+
+                        <% if current_user.present? %>
+                          <div class="field">
+                            <%= f.text_area :content,:placeholder => 'Коментирайте поста тук...', :style => "height: 80px; min-height:0px; width:100%; margin-top: -1px; margin-bottom: 50px;" %>
+                          </div>
+                          <div class="field", style="display: none;">
+                            <%= f.label :user_id %><br />
+                            <%= f.number_field :user_id, :value => current_user.id %>
+                          </div>
+                          <div class="field", style="display: none;">
+                            <%= f.label :open_group_post_id %><br />
+                            <%= f.number_field :open_group_post_id, :value => post.id %>
+                          </div>
+                          <div class="actions">
+                            <button type="submit" class="button span_5_of_5" style=" height: 30px;width:30%; margin-top: -30px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold; float: right;">Публикувай</button>
+                          </div>
+                      <% end %>
+                      <% end %>
+                        
+                      </div>
+                    </div>
+                  </div>
 
       
      
 	<% end %>
-</p>
 
-<div>
-	<% if current_user.present? && @pesho %>
-		<%= form_for(OpenGroupPost.new) do |f| %>
-  			<% if OpenGroupPost.new.errors.any? %>
-    			<div id="error_explanation">
-      				<h2> <%= pluralize(OpenGroupPost.new.errors.count, "error") %> prohibited this open_group_post from being saved: </h2>
-      				<ul>
-      					<% OpenGroupPost.new.errors.full_messages.each do |msg| %>
-        					<li> <%= msg %> </li>
-      					<% end %>
-      				</ul>
-    			</div>
-  			<% end %>
-  			<div class="field">
-    			<%= f.label :title %><br />
-    			<%= f.text_field :title %>
-  			</div>
-  			<div class="field">
-    			<%= f.label :content %><br />
-    			<%= f.text_area :content %>
-  			</div>
-  			<div class="field", style="display: none;">
-    			<%= f.label :open_group_id %><br />
-    			<%= f.number_field :open_group_id, :value => @open_group.id %>
-  			</div>
-  			<div class="field", style="display: none;">
-    			<%= f.label :user_id %><br />
-    			<%= f.number_field :user_id, :value => current_user.id %>
-  			</div>
-  			<div class="field">
-    			<%= f.file_field :attach %>
-  			</div>  
-  			<div class="actions">
-    			<%= f.submit %>
-  			</div>
-		<% end %>
-	<% end %>
+
 </div>
- 
-<%= link_to 'Edit', edit_open_group_path(@open_group) %> |
-<%= link_to 'Back', open_groups_path %>
+</div>
+
+
+
+  <div class="right-pane"> 
+        <nav>
+              <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси</button>
+                                    <li><a href="#_push">Push button</a></li>
+                                    <li><a href="#_command">Command button</a></li>
+                                    <li><a href="#_toolbar">Tool bar</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+              </ul>
+        </nav>
+
+        <nav>
+              
+                <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
+                    <% opens = OpenGroup.all
+                    limit = 0;
+                    opens.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :open_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                    <% cors = Course.all
+                    limit = 0;
+                    cors.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :courses, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+
+                    <% close = ClosedGroup.all
+                    limit = 0;
+                    close.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :closed_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                  
+                 </ul>
+        </nav>
+
+      </div>
