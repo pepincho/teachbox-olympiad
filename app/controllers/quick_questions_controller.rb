@@ -32,11 +32,6 @@ class QuickQuestionsController < ApplicationController
     end
   end
 
-  # GET /quick_questions/1/edit
-  def edit
-    @quick_question = QuickQuestion.find(params[:id])
-  end
-
   # POST /quick_questions
   # POST /quick_questions.json
   def create
@@ -48,22 +43,6 @@ class QuickQuestionsController < ApplicationController
         format.json { render json: @quick_question, status: :created, location: @quick_question }
       else
         format.html { render action: "new" }
-        format.json { render json: @quick_question.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /quick_questions/1
-  # PUT /quick_questions/1.json
-  def update
-    @quick_question = QuickQuestion.find(params[:id])
-
-    respond_to do |format|
-      if @quick_question.update_attributes(params[:quick_question])
-        format.html { redirect_to @quick_question, notice: 'Quick question was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
         format.json { render json: @quick_question.errors, status: :unprocessable_entity }
       end
     end

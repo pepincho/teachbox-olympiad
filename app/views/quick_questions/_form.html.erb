@@ -1,25 +1,32 @@
-<%= form_for(@quick_question) do |f| %>
-  <% if @quick_question.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@quick_question.errors.count, "error") %> prohibited this quick_question from being saved:</h2>
+<% if current_user.present? %>
 
-      <ul>
-      <% @quick_question.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+  <%= form_for(@quick_question) do |f| %>
+    <% if @quick_question.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@quick_question.errors.count, "error") %> prohibited this quick_question from being saved:</h2>
+        <ul>
+          <% @quick_question.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
+    <div class="field">
+      <%= f.label :question %><br />
+      <%= f.text_area :question, :style => "height:100px;" %>
+    </div>
+    <div class="field" style="display: none;">
+      <%= f.label :user_id %><br />
+      <%= f.number_field :user_id, :value => current_user.id %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :question %><br />
-    <%= f.text_area :question %>
-  </div>
-  <div class="field">
-    <%= f.label :user_id %><br />
-    <%= f.number_field :user_id %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+<% else %>
+
+  Трябва да си влезете в профила или да се регистрирате.
+
+<% end %> 

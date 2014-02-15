@@ -10,17 +10,6 @@ class QuickAnswersController < ApplicationController
     end
   end
 
-  # GET /quick_answers/1
-  # GET /quick_answers/1.json
-  def show
-    @quick_answer = QuickAnswer.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @quick_answer }
-    end
-  end
-
   # GET /quick_answers/new
   # GET /quick_answers/new.json
   def new
@@ -32,38 +21,20 @@ class QuickAnswersController < ApplicationController
     end
   end
 
-  # GET /quick_answers/1/edit
-  def edit
-    @quick_answer = QuickAnswer.find(params[:id])
-  end
-
   # POST /quick_answers
   # POST /quick_answers.json
   def create
     @quick_answer = QuickAnswer.new(params[:quick_answer])
-
+    @quick_answer.quick_question_id = params[:quick_question_id]
+    @quick_answer.user_id = params[:user_id]
+    @quick_answer.save
+    
     respond_to do |format|
       if @quick_answer.save
         format.html { redirect_to :back }
         format.json { render json: @quick_answer, status: :created, location: @quick_answer }
       else
         format.html { render action: "new" }
-        format.json { render json: @quick_answer.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /quick_answers/1
-  # PUT /quick_answers/1.json
-  def update
-    @quick_answer = QuickAnswer.find(params[:id])
-
-    respond_to do |format|
-      if @quick_answer.update_attributes(params[:quick_answer])
-        format.html { redirect_to @quick_answer, notice: 'Quick answer was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
         format.json { render json: @quick_answer.errors, status: :unprocessable_entity }
       end
     end

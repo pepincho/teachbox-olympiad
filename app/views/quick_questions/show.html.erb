@@ -6,10 +6,45 @@
 </p>
 
 <p>
-  <b>User:</b>
-  <%= @quick_question.user_id %>
+  <b>Answers:</b><br />
+  <% 
+  	@answers = QuickAnswer.where('quick_question_id = ?' , @quick_question.id)
+	@answers.each do |a| %>
+    	<%= User.find(a.user_id).name %>:
+    	<%= a.answer %>
+    	<br />
+   	<% end %>
 </p>
 
-
-<%= link_to 'Edit', edit_quick_question_path(@quick_question) %> |
-<%= link_to 'Back', quick_questions_path %>
+	<%= form_for(QuickAnswer.new, 
+        :url => { :controller => :quick_answers, 
+        :action => :create, 
+        :quick_question_id => @quick_question.id, :user_id => current_user.id }, :html => {:method => :post}) do |f| %>
+	<% if QuickAnswer.new.errors.any? %>
+    	<div id="error_explanation">
+      		<h2><%= pluralize(QuickAnswer.new.errors.count, "error") %> prohibited this quick_answer from being saved:</h2>
+      		<ul>
+      			<% QuickAnswer.new.errors.full_messages.each do |msg| %>
+        			<li><%= msg %></li>
+      			<% end %>
+      		</ul>
+    	</div>
+  	<% end %>
+  	<% if current_user.present? %>
+  		<div class="field">
+    		<%= f.label :answer %><br />
+    		<%= f.text_area :answer, :style => "height:100px;" %>
+  		</div>
+  		<div class="field" style="display: none;">
+    		<%= f.label :user_id %><br />
+    		<%= f.number_field :user_id, :value => current_user.id %>
+  		</div>
+  		<div class="field" style="display: none;">
+    		<%= f.label :quick_question_id %><br />
+    		<%= f.number_field :quick_question_id, :value => @quick_question.id %>
+  		</div>
+  		<div class="actions">
+    		<%= f.submit %>
+  		</div>
+	<% end %>
+<% end %>

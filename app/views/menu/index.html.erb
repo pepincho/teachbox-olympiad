@@ -6,16 +6,16 @@
       <div class="left-pane"> 
 
        <%= link_to  new_open_group_path() do %>
-           <button class="large button span_5_of_5" style="margin-top: 20px; font-size: 16px; background-color:#333; color: white;">Създай група за дискусии</button>
+          <button class="large button span_5_of_5" style="margin-top: 20px; font-size: 16px; background-color:#333; color: white;">Създай група за дискусии</button>
        <% end %>
        <%= link_to  new_closed_group_path() do %>
-           <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;" >Създай частна група</button>
+          <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;" >Създай частна група</button>
        <% end %>
-       <%= link_to new_course_path() do %>
-        <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;">Създай курс</button>
+       <%= link_to  new_course_path() do %>
+          <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;">Създай курс</button>
        <% end %>
-       <%= link_to  do %>
-                  <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;">Задай въпрос</button>
+       <%= link_to  new_quick_question_path() do %>
+          <button class="large button span_5_of_5" style="margin-top: 5px; font-size: 16px; background-color:#333;color: white;">Задай въпрос</button>
        <% end %>
         <nav>
               <%    count = 0
@@ -325,13 +325,23 @@
         <nav>
               <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
                   <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси</button>
-                                    <li><a href="#_push">Push button</a></li>
-                                    <li><a href="#_command">Command button</a></li>
-                                    <li><a href="#_toolbar">Tool bar</a></li>
-                                    <li><a href="#_ibutton">Image button</a></li>
-                                    <li><a href="#_shortcut">Shortcuts</a></li>
-                                    <li><a href="#_ibutton">Image button</a></li>
-                                    <li><a href="#_shortcut">Shortcuts</a></li>
+                  <% 
+                    QuickQuestion.order("RANDOM()").each do |x|
+
+                      quickAnswers = QuickAnswer.all
+                      @guz = false
+
+                      quickAnswers.each do |a|
+                        if x.id == a.quick_question_id
+                          @guz = true
+                          break
+                        end
+                      end
+
+                      if !@guz %>
+                        <li><%= link_to x.question, quick_question_path(x.id) %></li>
+                      <% end 
+                    end %>
               </ul>
         </nav>
 
