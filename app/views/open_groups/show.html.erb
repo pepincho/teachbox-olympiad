@@ -30,14 +30,12 @@
         </div>
         <div style="text-align: center;">
           <% if current_user.present? && !@pesho %>
-            <button class="large" style="width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ">
-              <%= link_to "Влез", {:controller => :open_groups, :action => :join, :id => @open_group.id }, {:method => :post } %>
-            </button>
+            
+              <%= button_to "Влез", {:controller => :open_groups, :action => :join, :id => @open_group.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ", :class => "large"} %>
+        
           <% end %>
           <% if current_user.present? && !@ivan && @pesho %>
-            <button class="large" style="width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ">
-              <%= link_to "Харесай", {:controller => :open_groups, :action => :like, :id => @open_group.id }, {:method => :post } %>
-            </button>
+            <%= button_to "Харесай", {:controller => :open_groups, :action => :like, :id => @open_group.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ", :class => "large"} %>`
           <% end %>
           
         </div>
