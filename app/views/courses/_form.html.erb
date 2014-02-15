@@ -1,27 +1,168 @@
-<%= form_for(@course) do |f| %>
-  <% if @course.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@course.errors.count, "error") %> prohibited this course from being saved:</h2>
+<div class="topbar" style="margin-left: auto ;  margin-right: auto ; " >
+  <div class="left-pane" style="margin-top:10px;"> 
+  <nav>
+              <%    count = 0
+                    @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id 
+                          count += 1
+                        end
+                    end
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if
+                        count += 1
+                      end
+                    end
+                   @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id
+                        count += 1
+                      end
+                    end   
 
-      <ul>
-      <% @course.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+                   if count != 0 %>
+                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
+                  <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                    <% @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id %>
+                          <li><%= link_to OpenGroup.find(a.open_group_id).name,  {:controller => :open_groups, :action => :show, :id => OpenGroup.find(a.open_group_id).id }, {:method => :get }  %>
+                          </li>
+                        <% end
+                    end
 
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
-  </div>
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if current_user.id == b.user_id %>
+                         <li><%= link_to Course.find(b.course_id).name,  {:controller => :courses, :action => :show, :id => Course.find(b.course_id).id }, {:method => :get }  %>
+                          </li>
+                      <% end
+                    end
 
+                  @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id %>
+                        <li> <%= link_to ClosedGroup.find(c.closed_group_id).name,  {:controller => :closed_groups, :action => :show, :id => ClosedGroup.find(c.closed_group_id).id }, {:method => :get }  %>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+                         </li>
+                      <% end
+                    end %>
+                  </ul>
+                  <% end %>
+                </nav>
+          </div>
+
+       <div class="middle-pane"> 
+       <%= form_for(@course) do |f| %>
+        <% if @course.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@course.errors.count, "error") %> prohibited this course from being saved:</h2>
+
+            <ul>
+            <% @course.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+         <div style="width:95%; margin-top:21px; margin-left:auto; margin-right: auto; text-align: center;">
+            <h2> Създаване на нов курс </h2>
+            <table cellpadding="0" style=" border: 1px #ccc solid; width:80%; margin-left:auto; margin-right: auto; margin-top: 40px;" >
+                  <tr>
+                    <td  style="height:auto; border-bottom: 1px #ccc solid; border-right: 1px #ccc solid; width:30%; text-align:center;">
+                                    <label style="color:black; font-size: 20px; margin:0; padding:0;"> Име </label>
+                        
+                    </td>
+                    <td  style=" height:auto; border-bottom: 1px #ccc solid; border-right: 1px #ccc solid; width:70%; text-align:center;">
+                       <div class="input-control text" style="margin-bottom:0;">
+                          
+                          <%= f.text_field :name %>
+                          <button class="btn-clear"></button>
+                        </div>
+                      </td> 
+                  </tr>
+                  <tr>
+                    <td  style="height:auto; border-bottom: 1px #ccc solid; border-right: 1px #ccc solid; width:30%; text-align:center;">
+                                    <label style="color:black; font-size: 20px; margin:0; padding:0;"> Описание </label>
+                        
+                    </td>
+                    <td  style=" height:auto; border-bottom: 1px #ccc solid; border-right: 1px #ccc solid; width:70%; text-align:center;">
+                       <div class="input-control textarea" style="margin-bottom:0;">
+                         <%= f.text_area :description, :style => "height:100px;" %>
+                       </div>
+                      </td> 
+                  </tr>
+            </table>
+                 <button type="submit" style="font-size: 15px; height: 35px; width:30%; background-color:#333; font-weight: bold; text-align:centefile:///C:/Users/Mapto/Desktop/TEACHBOX/edit.html#_pushr; color:white; margin-top: 20px; "> Създай курса </button>
+            
+        <% end %>
+       </div>
+       </div>
+
+      <div class="right-pane"> 
+        <nav>
+              <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси</button>
+                                    <li><a href="#_push">Push button</a></li>
+                                    <li><a href="#_command">Command button</a></li>
+                                    <li><a href="#_toolbar">Tool bar</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+                                    <li><a href="#_ibutton">Image button</a></li>
+                                    <li><a href="#_shortcut">Shortcuts</a></li>
+              </ul>
+        </nav>
+
+        <nav>
+              
+                <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
+                    <% opens = OpenGroup.all
+                    limit = 0;
+                    opens.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :open_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                    <% cors = Course.all
+                    limit = 0;
+                    cors.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :courses, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+
+                    <% close = ClosedGroup.all
+                    limit = 0;
+                    close.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :closed_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                  
+                 </ul>
+        </nav>
+
+      </div>
+ </div>
+

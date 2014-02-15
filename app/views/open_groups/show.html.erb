@@ -39,7 +39,7 @@
           <% end %>
           
         </div>
-        <nav>
+       <nav>
               <%    count = 0
                     @your_opens = UserOpenGroup.all
                       @your_opens.each do |a|
@@ -49,7 +49,7 @@
                     end
                   @yours_courses = UserCourse.all
                     @yours_courses.each do |b|
-                      if
+                      if  current_user.id == b.user_id
                         count += 1
                       end
                     end
@@ -94,12 +94,15 @@
       </div>
 
    <!-- ---------------------------------------------READY-------------------------------------------------------------- -->
-
+<% @openId = @open_group.id %>
       <div class="middle-pane"> 
           <div style="width:95%; margin-top:21px; margin-left:auto; margin-right: auto; text-align: center;">
            <table cellspacing="0" cellpadding="0" style=" width:100%; margin-left:auto; margin-right: auto;">
                   <% if current_user.present? && @pesho %>
-                    <%= form_for(OpenGroupPost.new) do |f| %>
+                    <%= form_for(OpenGroupPost.new , 
+                 :url => { :controller => :open_group_posts, 
+                       :action => :create, 
+                       :open_group_id => @open_group.id, :user_id => current_user.id },  :html => {:method => :post}) do |f| %>
                       <% if OpenGroupPost.new.errors.any? %>
                         <div id="error_explanation">
                           <h2> <%= pluralize(OpenGroupPost.new.errors.count, "error") %> prohibited this open_group_post from being saved: </h2>
@@ -116,15 +119,7 @@
                     </div>
                     <div class="input-control textarea" style="margin:0;">
                       <%= f.text_area :content, :style => 'height: 80px; min-height:0px;', :placeholder => 'Въведете информация по темата...' %>
-                    </div>
-                    <div class="field", style="display: none;">
-                      <%= f.label :open_group_id %><br />
-                      <%= f.number_field :open_group_id, :value => @open_group.id %>
-                    </div>
-                    <div class="field", style="display: none;">
-                      <%= f.label :user_id %><br />
-                      <%= f.number_field :user_id, :value => current_user.id %>
-                    </div>   
+                    </div> 
                   <tr>
                     <td style="width:50%;">
                       <button type="submit", style="height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white; margin-left:auto; margin-right: auto;"> Публикувай </button>

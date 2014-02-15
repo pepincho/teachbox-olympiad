@@ -20,10 +20,10 @@ class ClosedGroupsController < ApplicationController
     #   format.json { render json: @closed_group }
     
 
-    @users = UserClosedGroup.where("closed_group_id = ?", params[:id]) 
-    @usersname = Array.new 
-      @users.each do |user| 
-        @usersname.push(User.find(user.user_id).name) 
+    @users1 = UserClosedGroup.where("closed_group_id = ?", params[:id]) 
+    @usersname1 = Array.new 
+      @users1.each do |user| 
+        @usersname1.push(User.find(user.user_id).name) 
           if current_user.present?
               if user.user_id == current_user.id 
                 @pesho2 = true
@@ -74,15 +74,12 @@ end
     end
   end
 
-  # GET /closed_groups/1/edit
-  def edit
-    @closed_group = ClosedGroup.find(params[:id])
-  end
 
   # POST /closed_groups
   # POST /closed_groups.json
   def create
     @closed_group = ClosedGroup.new(params[:closed_group])
+    @closed_group.admin_id = current_user.id
 
     respond_to do |format|
       if @closed_group.save
@@ -106,21 +103,6 @@ end
     end
   end
 
-  # PUT /closed_groups/1
-  # PUT /closed_groups/1.json
-  def update
-    @closed_group = ClosedGroup.find(params[:id])
-
-    respond_to do |format|
-      if @closed_group.update_attributes(params[:closed_group])
-        format.html { redirect_to @closed_group, notice: 'Closed group was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @closed_group.errors, status: :unprocessable_entity }
-      end
-    end
-  end
 
   # DELETE /closed_groups/1
   # DELETE /closed_groups/1.json

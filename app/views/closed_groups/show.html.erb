@@ -4,6 +4,9 @@
           <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;">
             <%= @closed_group.name %>
           </button>
+           <div style="padding:10px; border-bottom:1px #ccc solid; text-align: center; ">
+            Администратор: &nbsp; <%= link_to User.find(@closed_group.admin_id).name, {:controller => :users, :action => :show, :id => @closed_group.admin_id }, {:method => :get } %>
+          </div>
           <div style="padding:10px; border-bottom:1px #ccc solid; ">
             <%= @closed_group.decription %>
           </div>
@@ -16,7 +19,7 @@
               <td style="width:50%; text-align: center;">
                 <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;") %> &nbsp;<span style="font-size: 15px;">
                 <% counter = 0 %>
-                <% @usersname.each do |user| %>
+                <% @users1.each do |user| %>
                   <% counter += 1 %>
                 <% end %>
                 <%= counter %></span>
@@ -33,7 +36,7 @@
           <%= button_to "Кандидадствай", {:controller => :closed_groups, :action => :requested, :id => @closed_group.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ", :class => "large"} %>
         <% end %>
 
-        <% if current_user.present? && !@ivan2 && !@pesho2 %>
+        <% if current_user.present? && !@ivan2 && @pesho2 %>
           <%= button_to "Харесай", {:controller => :closed_groups, :action => :like, :id => @closed_group.id}, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ", :class => "large"} %>`
         <% end %>
 
@@ -49,7 +52,7 @@
                     end
                   @yours_courses = UserCourse.all
                     @yours_courses.each do |b|
-                      if
+                      if  current_user.id == b.user_id
                         count += 1
                       end
                     end
@@ -148,19 +151,20 @@
               </div>
   
 <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; margin-bottom: 300px; ">
+  <% if current_user.present? && @pesho2 %>
         <%  linkTo = 1
             @neshto.each do |post| 
-              @martin = false
+              @martin2 = false
               some = LikesClosedGroupPost.where("closed_group_post_id = ?", post.id) 
               @comments = CommentsClosedGroupPost.where("closed_group_post_id = ?", post.id) 
 
                 some.each do |user| 
                       if current_user.present?
                         if user.user_id == current_user.id 
-                            @martin = true
+                            @martin2 = true
                             break
                         else
-                            @martin = false 
+                            @martin2 = false 
                         end
                       end
                   end
@@ -198,7 +202,7 @@
 
                   <table style="width:100%" cellspacing="0" cellpadding="0">
                     <tr style=" height: 30px;">
-                     <% if current_user.present? && !@martin && @pesho %>
+                     <% if current_user.present? && !@martin2 && @pesho2 %>
                   
                       <td style="width: 25%; height: 30px;" >
                       <%= button_to "Изчерпателно", {:controller => :closed_groups, :action => :like_post, :id => post.id, :value => 1 }, { :style => "height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white; "} %>
@@ -364,7 +368,7 @@
       
      
   <% end %>
-
+ <% end %>
 
 </div>
 </div>
@@ -435,191 +439,3 @@
 
       </div>
 
-<p id="notice"><%= notice %></p>
-<%= puts @request_admin %>
-<p>
-  <b>Likes:</b>
-  <%= @likes.length %>
-</p>
-<p>
-  <b>Name:</b>
-  <%= @closed_group.name %>
-</p>
-
-<p>
-  <b>Description:</b>
-  <%= @closed_group.decription %>
-</p>
-
-<p>
-  <b>Admin:</b>
-  <%= @closed_group_admin %>
-</p>
-  
-
-
-<% if current_user.present? && !(@isRequested || @pesho2) %>
-  <%= link_to "Join", {:controller => :closed_groups, :action => :requested, :id => @closed_group.id }, {:method => :post } %>
-<% end %>
-
-<% if current_user.present? && !@ivan2 && !@pesho2 %>
-	<%= link_to "Like", {:controller => :closed_groups, :action => :like, :id => @closed_group.id }, {:method => :post } %>
-<% end %>
-
-<br />
-<br />
-<b> Posts: </b><br />
-<p>
-  <%  @neshto.each do |post| 
-    @martin2 = false
-    some = LikesClosedGroupPost.where("closed_group_post_id = ?", post.id) 
-    @comments = CommentsClosedGroupPost.where("closed_group_post_id = ?", post.id) 
-    some.each do |user| 
-           if current_user.present?
-            if user.user_id == current_user.id 
-               @martin2 = true
-               break
-            else
-               @martin2 = false 
-            end
-           end
-      end
-
-      @izch =  LikesClosedGroupPost.where("closed_group_post_id = ? AND like_attribute = ?", post.id, 1).length 
-      @pol =   LikesClosedGroupPost.where("closed_group_post_id = ? AND like_attribute = ?", post.id, 2).length
-      @lub =   LikesClosedGroupPost.where("closed_group_post_id = ? AND like_attribute = ?", post.id, 3).length
-      @nezad = LikesClosedGroupPost.where("closed_group_post_id = ? AND like_attribute = ?", post.id, 4).length
-  %>
-    <%= post.title %>
-    <br />
-        <%= post.content %><br />
-        <% if post.attach.exists? %>
-        <a href="<%= post.attach.url %> ">
-             <b> File attached </b></a>
-        <% end %>
-        <br />
-        <% if current_user.present? && !@martin2 && @pesho2 %>
-  <%= link_to "Изчерпателно", {:controller => :closed_groups, :action => :like_post, :id => post.id, :value => 1 }, {:method => :post } %>
-  <%= link_to "Полезно", {:controller => :closed_groups, :action => :like_post, :id => post.id , :value => 2  }, {:method => :post } %>
-  <%= link_to "Любопитно", {:controller => :closed_groups, :action => :like_post, :id => post.id, :value => 3  }, {:method => :post } %>
-  <%= link_to "Незадоволително", {:controller => :closed_groups, :action => :like_post, :id => post.id, :value => 4  }, {:method => :post } %>
-  <% else 
-  %>
-  Изчерпателно Полезно Любопитно Незадоволително
-  <% end %>
-  <br />
-  <%= @izch  %> 
-  <%= @pol %> 
-  <%= @lub %>
-  <%= @nezad %>
-  <br />
-----------------------------------------------
-  <%= form_for(CommentsClosedGroupPost.new) do |f| %>
-  <% if CommentsClosedGroupPost.new.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(CommentsClosedGroupPost.new.errors.count, "error") %> prohibited this comments_closed_group_post from being saved:</h2>
-
-      <ul>
-      <% CommentsClosedGroupPost.new.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <% if current_user.present? %>
-  <div class="field">
-    <%= f.label :content %><br />
-    <%= f.text_area :content %>
-  </div>
-  <div class="field", style="display: none;">
-    <%= f.label :user_id %><br />
-    <%= f.number_field :user_id, :value => current_user.id %>
-  </div>
-  <div class="field", style="display: none;">
-    <%= f.label :closed_group_post_id %><br />
-    <%= f.number_field :closed_group_post_id, :value => post.id %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
-
-  <% end %>
-  <br />
-
-  <% @comments.each do |comments| %>
-        <% likescomment = LikesCommentsClosedGroupPost.where("comments_closed_group_post_id = ?", comments.id) %>
-        <% likescomment.each do |user| 
-            if current_user.present?
-              if user.user_id == current_user.id 
-                @patka = true
-                break
-              else
-                @patka = false 
-              end
-            end
-          end %>
-        <%= User.find(comments.user_id).name %>:
-        <%= comments.content %> | 
-        <%= likescomment.length %> | 
-        <% if current_user.present? && !@patka %>
-          <%= link_to "Like", {:controller => :closed_groups, :action => :like_comment, :id => comments.id }, {:method => :post } %>
-        <% end %>
-        <br />
-       
-      <% end %>
-
-
-<% end %>
-</p>
-
-
-
-
-<div>
-<% if current_user.present? && @pesho2 %>
-
-<%= form_for(ClosedGroupPost.new) do |f| %>
-  <% if ClosedGroupPost.new.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(ClosedGroupPost.new.errors.count, "error") %> prohibited this closed_group_post from being saved:</h2>
-
-      <ul>
-      <% ClosedGroupPost.new.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-<div class="field">
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :content %><br />
-    <%= f.text_area :content %>
-  </div>
-  <div class="field", style="display: none;">
-    <%= f.label :closed_group_id %><br />
-    <%= f.text_field :closed_group_id, :value => @closed_group.id %>
-  </div>
-  <div class="field", style="display: none;">
-    <%= f.label :user_id %><br />
-    <%= f.number_field :user_id, :value => current_user.id %>
-  </div>
-  <div class="field">
-    <%= f.file_field :attach %>
-  </div> 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
-
-
- <%  end  %>
-</div>
-
-
-<%= link_to 'Edit', edit_closed_group_path(@closed_group) %> |
-<%= link_to 'Back', closed_groups_path %>

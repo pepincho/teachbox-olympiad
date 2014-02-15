@@ -57,11 +57,7 @@ class OpenGroupsController < ApplicationController
     end
   end
 
-  # GET /open_groups/1/edit
-  def edit
-    @open_group = OpenGroup.find(params[:id])
-  end
-
+  
   # POST /open_groups
   # POST /open_groups.json
   def create
@@ -83,22 +79,6 @@ class OpenGroupsController < ApplicationController
         format.json { render json: @open_group, status: :created, location: @open_group }
       else
         format.html { render action: "new" }
-        format.json { render json: @open_group.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /open_groups/1
-  # PUT /open_groups/1.json
-  def update
-    @open_group = OpenGroup.find(params[:id])
-
-    respond_to do |format|
-      if @open_group.update_attributes(params[:open_group])
-        format.html { redirect_to @open_group, notice: 'Open group was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
         format.json { render json: @open_group.errors, status: :unprocessable_entity }
       end
     end

@@ -42,6 +42,9 @@ class OpenGroupPostsController < ApplicationController
   # POST /open_group_posts.json
   def create
     @open_group_post = OpenGroupPost.new(params[:open_group_post])
+    @open_group_post.open_group_id = params[:open_group_id]
+    @open_group_post.user_id = params[:user_id]
+    @open_group_post.save
 
     respond_to do |format|
       if @open_group_post.save

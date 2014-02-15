@@ -1,8 +1,10 @@
 <p id="notice"><%= notice %></p>
  <div class="topbar" style="margin-left: auto ;  margin-right: auto ; " >
   <div class="left-pane" style="margin-top:10px;"> 
+       <% if @user.id == current_user.id %>
        <%= link_to  edit_user_path(@user)  do %>
            <button class="large button span_5_of_5" style="margin-top: 10px; font-size: 16px; background-color:#333; color: white;"> Редактиране </button>
+       <% end %>
        <% end %>
 	<nav>
               <%    count = 0
