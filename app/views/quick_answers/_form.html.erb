@@ -1,3 +1,5 @@
+<% if current_user.present? %>
+
 <%= form_for(@quick_answer) do |f| %>
   <% if @quick_answer.errors.any? %>
     <div id="error_explanation">
@@ -25,4 +27,10 @@
   <div class="actions">
     <%= f.submit %>
   </div>
+<% end %>
+
+<% else %>
+
+  Трябва да си влезете в профила или да се регистрирате.
+
 <% end %>

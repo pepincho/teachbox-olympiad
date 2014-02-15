@@ -1,3 +1,6 @@
+<% if current_user.present? %>
+
+
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -65,3 +68,9 @@
   		</div>
 	<% end %>
 <% end %>
+
+<% else %>
+
+  Трябва да си влезете в профила или да се регистрирате.
+
+<% end %> 
