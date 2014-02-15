@@ -61,4 +61,17 @@ class QuickQuestionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def like_answer
+    like_answer = LikesAnswerQuestion.new
+    like_answer.user_id = current_user.id
+    like_answer.quick_answer_id = params[:id]
+    like_answer.save
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      # format.json { head :no_content }
+    end
+  end
+  
 end

@@ -69,7 +69,7 @@ TeachboxNoit::Application.routes.draw do
   end
 
   resources :quick_questions do
-    post :index, :on => :collection
+    post :like_answer, :on => :collection
   end
 
   # The priority is based upon order of creation:

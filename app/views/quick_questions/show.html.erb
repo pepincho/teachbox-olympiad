@@ -9,10 +9,34 @@
 <p>
   <b>Answers:</b><br />
   <% 
-  	@answers = QuickAnswer.where('quick_question_id = ?' , @quick_question.id)
+
+  	@answers = QuickAnswer.where('quick_question_id = ?', @quick_question.id)
 	  @answers.each do |a| %>
-    	<%= User.find(a.user_id).name %>:
-    	<%= a.answer %>
+      
+    <% isLiked = false                 
+       likesAnswer = LikesAnswerQuestion.where("quick_answer_id = ?", a.id) 
+       likesAnswer.each do |user| 
+          if current_user.present?
+            if user.user_id == current_user.id 
+              isLiked = true
+              break
+            else
+              isLiked = false 
+            end
+          end
+        end %>  
+
+            <%= User.find(a.user_id).name %>:
+            <%= a.answer %>
+
+      <% if current_user.present? && !isLiked %>
+        <%= link_to image_tag("thumbs23.png", :style => "width: 26px; height: 30px; padding-bottom:7px;" ), {:controller => :quick_questions, :action => :like_answer, :id => a.id }, {:method => :post } %>
+      <% else %>
+        <%=  image_tag("thumbs23.png", :style => "width: 26px; height: 30px; padding-bottom:7px;" ) %>
+      <% end %>
+
+      <%= likesAnswer.length %>
+      
     	<br />
    	<% end %>
 </p>
