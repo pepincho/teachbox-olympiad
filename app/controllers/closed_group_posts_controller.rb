@@ -41,6 +41,9 @@ class ClosedGroupPostsController < ApplicationController
   # POST /closed_group_posts.json
   def create
     @closed_group_post = ClosedGroupPost.new(params[:closed_group_post])
+    @closed_group_post.closed_group_id = params[:closed_group_id]
+    @closed_group_post.user_id = params[:user_id]
+    @closed_group_post.save
 
     respond_to do |format|
       if @closed_group_post.save

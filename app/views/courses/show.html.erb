@@ -102,7 +102,10 @@
           <div style="width:95%; margin-top:21px; margin-left:auto; margin-right: auto; text-align: center;">
            <table cellspacing="0" cellpadding="0" style=" width:100%; margin-left:auto; margin-right: auto;">
                   <% if current_user.present? && @pesho1 && @admin %>
-                    <%= form_for(CoursePost.new) do |f| %>
+                    <%= form_for(CoursePost.new, 
+                        :url => { :controller => :course_posts, 
+                        :action => :create, 
+                        :course_id => @course.id, :user_id => current_user.id }, :html => {:method => :post}) do |f| %>
                       <% if CoursePost.new.errors.any? %>
                         <div id="error_explanation">
                           <h2> <%= pluralize(CoursePost.new.errors.count, "error") %> prohibited this course_post from being saved: </h2>
@@ -189,7 +192,7 @@
                   </tr>
                   <tr >
                     <td class="details" colspan="3" style="color:black; font-size:20px; padding:0px;">
-                        от <%= User.find(post.user_id).name %>
+                        от <%= link_to User.find(post.user_id).name, {:controller => :users, :action => :show, :id => post.user_id }, {:method => :get } %>
                     </td>
                   </tr>
                   <tr>

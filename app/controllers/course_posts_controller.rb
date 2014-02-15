@@ -41,6 +41,9 @@ class CoursePostsController < ApplicationController
   # POST /course_posts.json
   def create
     @course_post = CoursePost.new(params[:course_post])
+    @course_post.course_id = params[:course_id]
+    @course_post.user_id = params[:user_id]
+    @course_post.save
 
     respond_to do |format|
       if @course_post.save
