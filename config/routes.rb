@@ -63,10 +63,13 @@ TeachboxNoit::Application.routes.draw do
      post :like_comment, :on => :collection
   end
 
-
   resources :requests do
     post :accept, :on => :collection
     post :decline, :on => :collection
+  end
+
+  resources :quick_questions do
+    post :index, :on => :collection
   end
 
   # The priority is based upon order of creation:

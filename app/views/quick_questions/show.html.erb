@@ -2,14 +2,15 @@
 
 <p>
   <b>Question:</b>
-  <%= @quick_question.question %>
+  Тема: <%= @quick_question.topic %><br />
+  Въпрос: <%= @quick_question.question %>
 </p>
 
 <p>
   <b>Answers:</b><br />
   <% 
   	@answers = QuickAnswer.where('quick_question_id = ?' , @quick_question.id)
-	@answers.each do |a| %>
+	  @answers.each do |a| %>
     	<%= User.find(a.user_id).name %>:
     	<%= a.answer %>
     	<br />
@@ -34,14 +35,6 @@
   		<div class="field">
     		<%= f.label :answer %><br />
     		<%= f.text_area :answer, :style => "height:100px;" %>
-  		</div>
-  		<div class="field" style="display: none;">
-    		<%= f.label :user_id %><br />
-    		<%= f.number_field :user_id, :value => current_user.id %>
-  		</div>
-  		<div class="field" style="display: none;">
-    		<%= f.label :quick_question_id %><br />
-    		<%= f.number_field :quick_question_id, :value => @quick_question.id %>
   		</div>
   		<div class="actions">
     		<%= f.submit %>

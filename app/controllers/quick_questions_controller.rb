@@ -36,6 +36,8 @@ class QuickQuestionsController < ApplicationController
   # POST /quick_questions.json
   def create
     @quick_question = QuickQuestion.new(params[:quick_question])
+    @quick_question.user_id = params[:user_id]
+    @quick_question.save
 
     respond_to do |format|
       if @quick_question.save

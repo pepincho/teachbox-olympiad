@@ -237,7 +237,7 @@
               <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; ">
                 <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;  " > Популярни частни групи </button>
                 <% count = 0 
-                   broi = 0%>
+                   broi = 0 %>
                 <% ClosedGroup.order("counter DESC").each do |x| %>
              
                     <%
@@ -324,24 +324,36 @@
       <div class="right-pane"> 
         <nav>
               <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
-                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси</button>
+
+                  <%= link_to  quick_questions_path() do %>
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси </button>
+                  <% end %>
+
                   <% 
-                    QuickQuestion.order("RANDOM()").each do |x|
+                    questions = QuickQuestion.all
+                    quickAnswers = QuickAnswer.all
+                    questionCounter = 0
 
-                      quickAnswers = QuickAnswer.all
-                      @guz = false
-
+                    questions.shuffle.each do |x|
+                      
+                      answered = false
+                      
                       quickAnswers.each do |a|
                         if x.id == a.quick_question_id
-                          @guz = true
-                          break
+                          answered = true
+                        
                         end
                       end
 
-                      if !@guz %>
+                      if !answered 
+                        questionCounter += 1 %>
                         <li><%= link_to x.question, quick_question_path(x.id) %></li>
-                      <% end 
-                    end %>
+                        <% 
+                        if questionCounter == 7
+                          break
+                        end
+                      end
+                    end %>    
               </ul>
         </nav>
 
@@ -350,7 +362,7 @@
                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
                   <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
                     <% opens = OpenGroup.all
-                    limit = 0;
+                    limit = 0
                     opens.shuffle.each do |x| 
                       limit = limit + 1
                       if limit == 3
@@ -363,7 +375,7 @@
                         </li>
                     <% end %>
                     <% cors = Course.all
-                    limit = 0;
+                    limit = 0
                     cors.shuffle.each do |x| 
                       limit = limit + 1
                       if limit == 3
@@ -377,7 +389,7 @@
                     <% end %>
 
                     <% close = ClosedGroup.all
-                    limit = 0;
+                    limit = 0
                     close.shuffle.each do |x| 
                       limit = limit + 1
                       if limit == 3

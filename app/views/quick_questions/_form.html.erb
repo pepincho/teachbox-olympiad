@@ -1,6 +1,9 @@
 <% if current_user.present? %>
-
-  <%= form_for(@quick_question) do |f| %>
+  
+  <%= form_for(QuickQuestion.new, 
+        :url => { :controller => :quick_questions, 
+        :action => :create, 
+        :user_id => current_user.id }, :html => {:method => :post}) do |f| %>
     <% if @quick_question.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(@quick_question.errors.count, "error") %> prohibited this quick_question from being saved:</h2>
@@ -13,12 +16,12 @@
     <% end %>
     
     <div class="field">
+      <%= f.label :topic %><br />
+      <%= f.text_field :topic %>
+    </div>
+    <div class="field">
       <%= f.label :question %><br />
       <%= f.text_area :question, :style => "height:100px;" %>
-    </div>
-    <div class="field" style="display: none;">
-      <%= f.label :user_id %><br />
-      <%= f.number_field :user_id, :value => current_user.id %>
     </div>
     <div class="actions">
       <%= f.submit %>

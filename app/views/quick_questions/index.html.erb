@@ -2,6 +2,7 @@
 
 <table>
   <tr>
+    <th>Topic</th>
     <th>Question</th>
     <th>User</th>
     <th></th>
@@ -11,6 +12,7 @@
 
 <% @quick_questions.each do |quick_question| %>
   <tr>
+    <td><%= quick_question.topic %></td>
     <td><%= quick_question.question %></td>
     <td><%= quick_question.user_id %></td>
     <td><%= link_to 'Show', quick_question %></td>
@@ -23,3 +25,25 @@
 <br />
 
 <%= link_to 'New Quick question', new_quick_question_path %>
+<br />
+---------------------------------------------
+<br />
+<%
+  questions = QuickQuestion.all
+  quickAnswers = QuickAnswer.all
+
+  questions.each do |x|
+    
+    answered = false
+    
+    quickAnswers.each do |a|
+      if x.id == a.quick_question_id
+        answered = true
+      end
+    end
+
+    if !answered %>
+      <%= link_to x.question, quick_question_path(x.id) %> <br />
+  <% 
+    end
+  end %>
