@@ -316,6 +316,9 @@
                </table>
              
             <% end %>
+            <div style=" margin-bottom:30px;">
+
+            </div>
             </div>
                 
       </div>
@@ -325,14 +328,14 @@
         <nav>
               <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
 
-                  <%= link_to  quick_questions_path() do %>
-                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси </button>
-                  <% end %>
+                  
 
                   <% 
                     questions = QuickQuestion.all
                     quickAnswers = QuickAnswer.all
                     questionCounter = 0
+                    showQuest = true
+
 
                     questions.shuffle.each do |x|
                       
@@ -346,6 +349,13 @@
                       end
 
                       if !answered 
+                        if showQuest
+                        %>
+                        <%= link_to quick_questions_path(), :style => "padding-left: -0px !important; " do %>
+                        <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Неотговорени въпроси </button>
+                        <% end  end%>
+                        <%
+                        showQuest = false
                         questionCounter += 1 %>
                         <li><%= link_to x.question, quick_question_path(x.id) %></li>
                         <% 

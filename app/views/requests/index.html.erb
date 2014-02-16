@@ -113,16 +113,45 @@
 	</div>
 
    <div class="right-pane"> 
-        <nav>
+            <nav>
               <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
-                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Въпроси</button>
-                                    <li><a href="#_push">Push button</a></li>
-                                    <li><a href="#_command">Command button</a></li>
-                                    <li><a href="#_toolbar">Tool bar</a></li>
-                                    <li><a href="#_ibutton">Image button</a></li>
-                                    <li><a href="#_shortcut">Shortcuts</a></li>
-                                    <li><a href="#_ibutton">Image button</a></li>
-                                    <li><a href="#_shortcut">Shortcuts</a></li>
+
+                  
+
+                  <% 
+                    questions = QuickQuestion.all
+                    quickAnswers = QuickAnswer.all
+                    questionCounter = 0
+                    showQuest = true
+
+
+                    questions.shuffle.each do |x|
+                      
+                      answered = false
+                      
+                      quickAnswers.each do |a|
+                        if x.id == a.quick_question_id
+                          answered = true
+                        
+                        end
+                      end
+
+                      if !answered 
+                        if showQuest
+                        %>
+                        <%= link_to quick_questions_path(), :style => "padding-left: -0px !important; " do %>
+                        <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Неотговорени въпроси </button>
+                        <% end  end%>
+                        <%
+                        showQuest = false
+                        questionCounter += 1 %>
+                        <li><%= link_to x.question, quick_question_path(x.id) %></li>
+                        <% 
+                        if questionCounter == 7
+                          break
+                        end
+                      end
+                    end %>    
               </ul>
         </nav>
 

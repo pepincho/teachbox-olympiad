@@ -1,73 +1,266 @@
 <% if current_user.present? %>
+<div class="topbar" style="margin-left: auto ;  margin-right: auto ;" >
+      <div class="left-pane"> 
+        <nav>
+              <%    count = 0
+                    @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id 
+                          count += 1
+                        end
+                    end
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if  current_user.id == b.user_id
+                        count += 1
+                      end
+                    end
+                   @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id
+                        count += 1
+                      end
+                    end   
+
+                   if count != 0 %>
+                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 20px;">
+                  <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                    <% @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id %>
+                          <li><%= link_to OpenGroup.find(a.open_group_id).name,  {:controller => :open_groups, :action => :show, :id => OpenGroup.find(a.open_group_id).id }, {:method => :get }  %>
+                          </li>
+                        <% end
+                    end
+
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if current_user.id == b.user_id %>
+                         <li><%= link_to Course.find(b.course_id).name,  {:controller => :courses, :action => :show, :id => Course.find(b.course_id).id }, {:method => :get }  %>
+                          </li>
+                      <% end
+                    end
+
+                  @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id %>
+                        <li> <%= link_to ClosedGroup.find(c.closed_group_id).name,  {:controller => :closed_groups, :action => :show, :id => ClosedGroup.find(c.closed_group_id).id }, {:method => :get }  %>
+
+                         </li>
+                      <% end
+                    end %>
+                  </ul>
+                  <% end %>
+                </nav>
 
 
-<p id="notice"><%= notice %></p>
+      </div>
+       <div class="middle-pane"> 
+              <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto;">
 
-<p>
-  <b>Question:</b>
-  Тема: <%= @quick_question.topic %><br />
-  Въпрос: <%= @quick_question.question %>
-</p>
+                <table border="1px" style="width:100%" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td rowspan="2" style="width:70px; height:70px;">
+                        <%= image_tag User.find(@quick_question.user_id).pic.url(), :style => "width:100%; height:auto;" %>
+                    </td>
+                    <td class="details" colspan="3" style="color:black; font-size:20px; padding:0;">
+                        <button class="button span_5_of_5 " style="height: 100%; margin:0; padding: 0; font-size: 22px; background-color:#2e92cf; color: white; border:0px; font-weight: bold; margin-top:-2px;"> <%= @quick_question.topic %> </button>
+                    </td>
+                  </tr>
+                  <tr >
+                    <td class="details" colspan="3" style="color:black; font-size:20px; padding:0px;">
+                        от <%= link_to User.find(@quick_question.user_id).name,  {:controller => :users, :action => :show, :id => @quick_question.user_id }, {:method => :get } %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" style="padding: 10px;">
+                         <%= @quick_question.question %>
 
-<p>
-  <b>Answers:</b><br />
-  <% 
+                    </td>
+                  </tr>
+                  </table>
+                
+                  <div style="border: 1px black solid; width:100%; margin-top: -1px; padding:20px;">
 
-  	@answers = QuickAnswer.where('quick_question_id = ?', @quick_question.id)
-	  @answers.each do |a| %>
-      
-    <% isLiked = false                 
-       likesAnswer = LikesAnswerQuestion.where("quick_answer_id = ?", a.id) 
-       likesAnswer.each do |user| 
-          if current_user.present?
-            if user.user_id == current_user.id 
-              isLiked = true
-              break
-            else
-              isLiked = false 
-            end
-          end
-        end %>  
+                   <%   
+                       sortedId = Hash.new
 
-            <%= User.find(a.user_id).name %>:
-            <%= a.answer %>
+                       @answers = QuickAnswer.where('quick_question_id = ?', @quick_question.id)
+                       @answers.each do |a| 
+                        likeAnswer = LikesAnswerQuestion.where("quick_answer_id = ?", a.id) 
+                        sortedId[a.id] = likeAnswer.length
+                       end
 
-      <% if current_user.present? && !isLiked %>
-        <%= link_to image_tag("thumbs23.png", :style => "width: 26px; height: 30px; padding-bottom:7px;" ), {:controller => :quick_questions, :action => :like_answer, :id => a.id }, {:method => :post } %>
-      <% else %>
-        <%=  image_tag("thumbs23.png", :style => "width: 26px; height: 30px; padding-bottom:7px;" ) %>
-      <% end %>
 
-      <%= likesAnswer.length %>
-      
-    	<br />
-   	<% end %>
-</p>
+                      sortedId.keys.sort_by { |key| sortedId[key] }.reverse.each  do |a|
 
-	<%= form_for(QuickAnswer.new, 
-        :url => { :controller => :quick_answers, 
-        :action => :create, 
-        :quick_question_id => @quick_question.id, :user_id => current_user.id }, :html => {:method => :post}) do |f| %>
-	<% if QuickAnswer.new.errors.any? %>
-    	<div id="error_explanation">
-      		<h2><%= pluralize(QuickAnswer.new.errors.count, "error") %> prohibited this quick_answer from being saved:</h2>
-      		<ul>
-      			<% QuickAnswer.new.errors.full_messages.each do |msg| %>
-        			<li><%= msg %></li>
-      			<% end %>
-      		</ul>
-    	</div>
-  	<% end %>
-  	<% if current_user.present? %>
-  		<div class="field">
-    		<%= f.label :answer %><br />
-    		<%= f.text_area :answer, :style => "height:100px;" %>
-  		</div>
-  		<div class="actions">
-    		<%= f.submit %>
-  		</div>
-	<% end %>
-<% end %>
+                        isLiked = false                 
+                         likesAnswer = LikesAnswerQuestion.where("quick_answer_id = ?", a) 
+                         likesAnswer.each do |user| 
+                            if current_user.present?
+                              if user.user_id == current_user.id 
+                                isLiked = true
+                                break
+                              else
+                                isLiked = false 
+                              end
+                            end
+                          end
+                        %>
+
+                    <table style="width:100%;" cellpadding="5">
+                    <tr>
+                      <td style="text-align:center;">
+                        <%= image_tag User.find(QuickAnswer.find(a).user_id).pic.url(), :style => "width:60px; height:50px;" %>
+                      </td>
+                      <td style="width:84%;">
+                        <div class="notice" style="padding-bottom: 10px; padding-top: 10px;">
+                          <div class="fg-white" style="font-size:14px;">
+                            <div style="text-align: center; margin-top:-6px; font-size: 16px;"> 
+                               <%= link_to User.find(QuickAnswer.find(a).user_id).name, {:controller => :users, :action => :show, :id => QuickAnswer.find(a).user_id }, {:method => :get } %> 
+                              <hr style="margin:0; padding:0; margin-top:5px; margin-bottom: 5px;">
+                            </div>
+                              <%= QuickAnswer.find(a).answer %>
+
+                          </div>
+                        </div>
+                      </td>
+                      <td style="width:6%; text-align: center;">
+                        <% if current_user.present? && !isLiked %>
+                          <%= link_to image_tag("thumbs23.png", :style => "width: 26px; height: 30px; padding-bottom:7px;" ), {:controller => :quick_questions, :action => :like_answer, :id => QuickAnswer.find(a).id }, {:method => :post } %>
+                        <% else %>
+                          <%=  image_tag("thumbs23.png", :style => "width: 26px; height: 30px; padding-bottom:7px;" ) %>
+                        <% end %>  
+                        <br />
+                        <font style="font-size: 18px;">  <%= likesAnswer.length %> </font>
+                      </td>
+                    </tr>
+                    </table>
+
+                    <% end %>
+
+                    <%= form_for(QuickAnswer.new, 
+                          :url => { :controller => :quick_answers, 
+                          :action => :create, 
+                          :quick_question_id => @quick_question.id, :user_id => current_user.id }, :html => {:method => :post}) do |f| %>
+                     <% if QuickAnswer.new.errors.any? %>
+                        <div id="error_explanation">
+                            <h2><%= pluralize(QuickAnswer.new.errors.count, "error") %> prohibited this quick_answer from being saved:</h2>
+                            <ul>
+                              <% QuickAnswer.new.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                              <% end %>
+                            </ul>
+                        </div>
+                      <% end %>
+
+                    <div style="width: 80%; margin-left:auto; margin-right:auto;">
+                      <%= f.text_area :answer, :style => "height: 80px; min-height:0px; width:100%; margin-top: -1px; margin-bottom: 40px; margin-top: 40px;", :placeholder => "Отговорете на въпроса тук..."  %>
+                      <button class="button span_5_of_5" style=" height: 30px;width:30%; margin-top: -30px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold; float: right;">Отговори</button>
+                    </div>
+                  </div>
+
+                  <% end %>
+
+               </div>
+       </div>
+
+        <div class="right-pane"> 
+        <nav>
+              <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
+
+                  
+
+                  <% 
+                    questions = QuickQuestion.all
+                    quickAnswers = QuickAnswer.all
+                    questionCounter = 0
+                    showQuest = true
+
+
+                    questions.shuffle.each do |x|
+                      
+                      answered = false
+                      
+                      quickAnswers.each do |a|
+                        if x.id == a.quick_question_id
+                          answered = true
+                        
+                        end
+                      end
+
+                      if !answered 
+                        if showQuest
+                        %>
+                        <%= link_to quick_questions_path(), :style => "padding-left: -0px !important; " do %>
+                        <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Неотговорени въпроси </button>
+                        <% end  end%>
+                        <%
+                        showQuest = false
+                        questionCounter += 1 %>
+                        <li><%= link_to x.question, quick_question_path(x.id) %></li>
+                        <% 
+                        if questionCounter == 7
+                          break
+                        end
+                      end
+                    end %>    
+              </ul>
+        </nav>
+
+        <nav>
+              
+                <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
+                    <% opens = OpenGroup.all
+                    limit = 0
+                    opens.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :open_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                    <% cors = Course.all
+                    limit = 0
+                    cors.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :courses, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+
+                    <% close = ClosedGroup.all
+                    limit = 0
+                    close.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :closed_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                  
+                 </ul>
+        </nav>
+
+      </div>
+    </div>
+     </div>
+
+
 
 <% else %>
 
