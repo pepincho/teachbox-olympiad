@@ -65,7 +65,9 @@
 
                    if count != 0 %>
                  <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
-                  <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                  <%= link_to({:controller => :users, :action => :show, :id => current_user.id }, { :style => "padding-left: -0px !important; "}) do %>
+                      <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                  <% end %>
                     <% @your_opens = UserOpenGroup.all
                       @your_opens.each do |a|
                         if current_user.id == a.user_id %>
@@ -179,7 +181,7 @@
                          <%= image_tag User.find(post.user_id).pic.url(), :style => "width:100%; height:auto;" %>
                     </td>
                     <td class="details" colspan="3" style="color:black; font-size:20px; padding:0;">
-                        <button class="button span_5_of_5 " style="height: 100%; margin:0; padding: 0; font-size: 22px; background-color:#2e92cf; color: white; border:0px; font-weight: bold; margin-top:-2px;"><%= post.title %></button>
+                        <button class="button span_5_of_5 " style="height: 40px; margin:0; padding: 0; font-size: 22px; background-color:#2e92cf; color: white; border:0px; font-weight: bold; margin-top: -1px;"><%= post.title %></button>
                     </td>
                   </tr>
                   <tr >

@@ -15,3 +15,4 @@
 //= require metro.min
 //= require jquery.min
 //= require jquery.widget.min
+//= require functions

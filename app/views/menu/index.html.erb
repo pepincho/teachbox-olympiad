@@ -40,7 +40,9 @@
 
                    if count != 0 %>
                  <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
-                  <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                 <%= link_to({:controller => :users, :action => :show, :id => current_user.id }, { :style => "padding-left: -0px !important; "}) do %>
+                      <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                  <% end %>
                     <% @your_opens = UserOpenGroup.all
                       @your_opens.each do |a|
                         if current_user.id == a.user_id %>
@@ -476,13 +478,13 @@
    
     <div class="block" style="background-color:white; position: absolute; height:auto; width: 100%; min-width: 1000px;  ">
       <div class="section group">
-        <div class="col span_1_of_5"><h4>Групи за дискусия</h4><p class="centralno">Мястото, където всеки има думата - "В спора се ражда истината!".</p></div>
-        <div class="col span_1_of_5"><h4>Частни групи</h4><p class="centralno">Целта на този тип групи е да се споделя лична информация между членовете.</p></div>
+        <div class="col span_1_of_5"><h4>Групи за дискусия</h4><p class="centralno">Това са отворени групи, за всички потребители с близки интереси. Това е мястото, където вие можете да споделяте вашите виждания и мнения по определена тема. <br/> "В спора се ражда истината!"</p></div>
+        <div class="col span_1_of_5"><h4>Частни групи</h4><p class="centralno">Това са групи с ограничен достъп, които имат собствен администратор. Той приема или отхвърля кандидатстващите потребители. Тук можете да споделяте информация, която няма да бъде достъпна до останалите потребители.</p></div>
         <div class="col span_1_of_5 centered" style=" margin-bottom: 0;" >
           <h4>Регистрация</h4>
-          <%= form_for(resource, :as => resource_name,  :url => registration_path(resource_name), :html => { :class => "hash"}) do |f| %>
+          <%= form_for(resource, :as => resource_name,  :url => registration_path(resource_name), :html => { :class => "hash", :name => "registrationForm", :onSubmit => 'return validateForm();' } ) do |f| %>
           <form style="text-align: center;">
-              <div class="input-control text" data-role="input-control">
+              <div class="input-control text" data-role="input-control" >
                       <%= devise_error_messages! %>
                       <%= f.text_field :name, :placeholder => "Име и фамилия", :style => "margin-bottom:4px; text-align: center;",  :tabindex => 3 %> 
                       <%= f.email_field :email, :placeholder=>"Електронна поща", :style =>"margin-bottom:4px; text-align: center;",  :tabindex => 4 %>
@@ -493,8 +495,8 @@
           </form>
           <% end %>
         </div>
-        <div class="col span_1_of_5"><h4>Курсове</h4><p class="centralno">Тук можете да водите Вашия онлайн курс по един иновативен начин.</p></div>
-        <div class="col span_1_of_5"><h4>Бързи въпроси</h4><p class="centralno">Задай въпрос - бързо, лесно и ефективно.</p></div>
+        <div class="col span_1_of_5"><h4>Курсове</h4><p class="centralno">Това е вид група, която предоставя възможността на всеки компетентен човек в дадена област, да споделя своите знания. Той може да помага и насочва членовете на групата. Онлайн курса е лесно достъпен за вскички възрастови групи.</p></div>
+        <div class="col span_1_of_5"><h4>Бързи въпроси</h4><p class="centralno">Teachbox предлага възможността на всеки потребител да задава въпроси по разнообразни теми. Останалите потребители могат да помогнат на този човек бързо, лесно и ефективно.</p></div>
       </div>
     </div>
 
