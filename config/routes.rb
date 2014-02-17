@@ -32,6 +32,8 @@ TeachboxNoit::Application.routes.draw do
 
   resources :open_groups
 
+  resources :random_groups
+
   resources :requests 
 
   root to: 'menu#index'

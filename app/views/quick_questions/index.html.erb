@@ -1,55 +1,196 @@
 <% if current_user.present? %>
+<div class="topbar" style="margin-left: auto ;  margin-right: auto ;" >
+      <div class="left-pane"> 
+        <nav>
+              <%    count = 0
+                    @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id 
+                          count += 1
+                        end
+                    end
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if  current_user.id == b.user_id
+                        count += 1
+                      end
+                    end
+                   @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id
+                        count += 1
+                      end
+                    end   
 
-<h1>Listing quick_questions</h1>
+                   if count != 0 %>
+                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 20px;">
+                  <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
+                    <% @your_opens = UserOpenGroup.all
+                      @your_opens.each do |a|
+                        if current_user.id == a.user_id %>
+                          <li><%= link_to OpenGroup.find(a.open_group_id).name,  {:controller => :open_groups, :action => :show, :id => OpenGroup.find(a.open_group_id).id }, {:method => :get }  %>
+                          </li>
+                        <% end
+                    end
 
-<table>
-  <tr>
-    <th>Topic</th>
-    <th>Question</th>
-    <th>User</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+                  @yours_courses = UserCourse.all
+                    @yours_courses.each do |b|
+                      if current_user.id == b.user_id %>
+                         <li><%= link_to Course.find(b.course_id).name,  {:controller => :courses, :action => :show, :id => Course.find(b.course_id).id }, {:method => :get }  %>
+                          </li>
+                      <% end
+                    end
 
-<% @quick_questions.each do |quick_question| %>
-  <tr>
-    <td><%= quick_question.topic %></td>
-    <td><%= quick_question.question %></td>
-    <td><%= quick_question.user_id %></td>
-    <td><%= link_to 'Show', quick_question %></td>
-    <td><%= link_to 'Edit', edit_quick_question_path(quick_question) %></td>
-    <td><%= link_to 'Destroy', quick_question, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
+                  @yours_closeds = UserClosedGroup.all
+                    @yours_closeds.each do |c|
+                      if current_user.id == c.user_id %>
+                        <li> <%= link_to ClosedGroup.find(c.closed_group_id).name,  {:controller => :closed_groups, :action => :show, :id => ClosedGroup.find(c.closed_group_id).id }, {:method => :get }  %>
 
-<br />
+                         </li>
+                      <% end
+                    end %>
+                  </ul>
+                  <% end %>
+                </nav>
 
-<%= link_to 'New Quick question', new_quick_question_path %>
-<br />
----------------------------------------------
-<br />
-<%
-  questions = QuickQuestion.all
-  quickAnswers = QuickAnswer.all
 
-  questions.each do |x|
-    
-    answered = false
-    
-    quickAnswers.each do |a|
-      if x.id == a.quick_question_id
-        answered = true
-      end
-    end
+      </div>
+ <div class="middle-pane"> 
+              <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; text-align: center;">
 
-    if !answered %>
-      <%= link_to x.question, quick_question_path(x.id) %> <br />
-  <% 
-    end
-  end %>
+              <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;  " > Неотговорени въпроси </button>
+              
+                <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+                 
+              <%
+                questions = QuickQuestion.all
+                quickAnswers = QuickAnswer.all
 
+                questions.each do |x|
+                  
+                  answered = false
+                  
+                  quickAnswers.each do |a|
+                    if x.id == a.quick_question_id
+                      answered = true
+                    end
+                  end
+
+                  if !answered %>
+                   <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:40%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;"><%= link_to x.topic, quick_question_path(x.id) %></h5>
+                      
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:60%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                      <%= x.question %>
+                      </td> 
+                    
+                  </tr>
+                <% 
+                  end
+                end %>
+      </table>
+</div>
+  </div>
+
+   <div class="right-pane"> 
+        <nav>
+              <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;  margin-top: 19px;">
+
+                  
+
+                  <% 
+                    questions = QuickQuestion.all
+                    quickAnswers = QuickAnswer.all
+                    questionCounter = 0
+                    showQuest = true
+
+
+                    questions.shuffle.each do |x|
+                      
+                      answered = false
+                      
+                      quickAnswers.each do |a|
+                        if x.id == a.quick_question_id
+                          answered = true
+                        
+                        end
+                      end
+
+                      if !answered 
+                        if showQuest
+                        %>
+                        <%= link_to quick_questions_path(), :style => "padding-left: -0px !important; " do %>
+                        <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Неотговорени въпроси </button>
+                        <% end  end%>
+                        <%
+                        showQuest = false
+                        questionCounter += 1 %>
+                        <li><%= link_to x.topic, quick_question_path(x.id) %></li>
+                        <% 
+                        if questionCounter == 7
+                          break
+                        end
+                      end
+                    end %>    
+              </ul>
+        </nav>
+
+        <nav>
+              
+                <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
+                  <%= link_to random_groups_path, :style => "padding-left: -0px !important; " do %>
+                  <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
+                  <% end %>
+                    <% opens = OpenGroup.all
+                    limit = 0
+                    opens.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :open_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                    <% cors = Course.all
+                    limit = 0
+                    cors.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :courses, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+
+                    <% close = ClosedGroup.all
+                    limit = 0
+                    close.shuffle.each do |x| 
+                      limit = limit + 1
+                      if limit == 3
+                        break
+                      end
+                      %>
+                        
+                        <li>
+                          <%= link_to x.name,  {:controller => :closed_groups, :action => :show, :id => x.id }, {:method => :get }  %>
+                        </li>
+                    <% end %>
+                  
+                 </ul>
+        </nav>
+
+      </div>
+    </div>
+     </div>
 
 <% else %>
 

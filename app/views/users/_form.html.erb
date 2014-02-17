@@ -22,7 +22,7 @@
                     end   
 
                    if count != 0 %>
-                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
+                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 20px;">
                   <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
                     <% @your_opens = UserOpenGroup.all
                       @your_opens.each do |a|
@@ -156,7 +156,7 @@
                         <%
                         showQuest = false
                         questionCounter += 1 %>
-                        <li><%= link_to x.question, quick_question_path(x.id) %></li>
+                        <li><%= link_to x.topic, quick_question_path(x.id) %></li>
                         <% 
                         if questionCounter == 7
                           break
@@ -169,7 +169,9 @@
         <nav>
               
                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
+                  <%= link_to random_groups_path, :style => "padding-left: -0px !important; " do %>
                   <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
+                  <% end %>
                     <% opens = OpenGroup.all
                     limit = 0;
                     opens.shuffle.each do |x| 

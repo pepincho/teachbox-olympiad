@@ -25,7 +25,7 @@
                     end   
 
                    if count != 0 %>
-                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 10px;">
+                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000; margin-top: 20px;">
                   <button class="large button span_5_of_5 " style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Твоите групи</button>
                     <% @your_opens = UserOpenGroup.all
                       @your_opens.each do |a|
@@ -60,79 +60,259 @@
         <% if current_user.present? %>
         <%      oGroups = Array.new
                 coGroups = Array.new
-                clGroups = Array.new
+                clGroups = Array.new 
+                qQuest = Array.new
+                count = 0
+                %>
+
+                <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; ">
+                <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;  " > Резултати от групи </button>
+              
+                <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
+                 
+
+                  <%
         @openResults.each do |b|
                   oGroups.push(b.id)
+                  count += 1
                   %>
 
-                  <%= b.name %>
+                   <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:35%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;">  <%= link_to b.name,  {:controller => :open_groups, :action => :show, :id => b.id }, {:method => :get }  %></h5>
+                       <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                           &nbsp;<span style="font-size: 15px;">
+                             <% @likes = LikesOpenGroup.where(:open_group_id =>b.id) %>
+                             <%= @likes.length %>
+                           </span>
+                          <br />
+                          <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                         &nbsp;<span style="font-size: 15px;">
+                          <% users = UserOpenGroup.where(:open_group_id => b.id) %>
+                          <%= users.length %>
+                         </span>
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:65%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                        <%= b.description %>
+                      </td> 
+                  </tr>
 
                   <%
         end
         @courseResults.each do |b|
                 coGroups.push(b.id)
-                  %>
+                 count += 1
+                   %>
 
-                  <%= b.name %>
+                   <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:35%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;">  <%= link_to b.name,  {:controller => :courses, :action => :show, :id => b.id }, {:method => :get }  %></h5>
+                       <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                           &nbsp;<span style="font-size: 15px;">
+                             <% @likes = LikesCourse.where(:course_id => b.id) %>
+                             <%= @likes.length %>
+                           </span>
+                          <br />
+                          <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                         &nbsp;<span style="font-size: 15px;">
+                          <% users = UserCourse.where(:course_id => b.id) %>
+                          <%= users.length %>
+                         </span>
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:65%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                        <%= b.description %>
+                      </td> 
+                  </tr>
 
                   <%
         end
         @closedResults.each do |b|
                 clGroups.push(b.id)
+                 count += 1
                   %>
 
-                  <%= b.name %>
+                   <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:35%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;">  <%= link_to b.name,  {:controller => :closed_groups, :action => :show, :id => b.id }, {:method => :get }  %></h5>
+                       <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                           &nbsp;<span style="font-size: 15px;">
+                             <% @likes = LikesClosedGroup.where(:closed_group_id => b.id) %>
+                             <%= @likes.length %>
+                           </span>
+                          <br />
+                          <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                         &nbsp;<span style="font-size: 15px;">
+                          <% users = UserClosedGroup.where(:closed_group_id => b.id) %>
+                          <%= users.length %>
+                         </span>
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:65%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                        <%= b.decription %>
+                      </td> 
+                  </tr>
 
                   <%
         end
 
         @openDesResults.each do |b|
+           count += 1
                 if !oGroups.include?(b.id)
                   %>
-
-                  <%= b.name %>
+                   <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:35%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;">  <%= link_to b.name,  {:controller => :open_groups, :action => :show, :id => b.id }, {:method => :get }  %></h5>
+                       <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                           &nbsp;<span style="font-size: 15px;">
+                             <% @likes = LikesOpenGroup.where(:open_group_id =>b.id) %>
+                             <%= @likes.length %>
+                           </span>
+                          <br />
+                          <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                         &nbsp;<span style="font-size: 15px;">
+                          <% users = UserOpenGroup.where(:open_group_id => b.id) %>
+                          <%= users.length %>
+                         </span>
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:65%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                        <%= b.description %>
+                      </td> 
+                  </tr>
 
                   <%
                 end
         end
         @courseDesResults.each do |b|
+           count += 1
                 if !coGroups.include?(b.id)
                   %>
 
-                  <%= b.name %>
+                  <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:35%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;">  <%= link_to b.name,  {:controller => :courses, :action => :show, :id => b.id }, {:method => :get }  %></h5>
+                       <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                           &nbsp;<span style="font-size: 15px;">
+                             <% @likes = LikesCourse.where(:course_id => b.id) %>
+                             <%= @likes.length %>
+                           </span>
+                          <br />
+                          <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                         &nbsp;<span style="font-size: 15px;">
+                          <% users = UserCourse.where(:course_id => b.id) %>
+                          <%= users.length %>
+                         </span>
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:65%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                        <%= b.description %>
+                      </td> 
+                  </tr>
 
                   <%
                 end
         end
         @closedDesResults.each do |b|
+           count += 1
                 if !clGroups.include?(b.id)
                   %>
 
-                  <%= b.name %>
+                  <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:35%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;">  <%= link_to b.name,  {:controller => :closed_groups, :action => :show, :id => b.id }, {:method => :get }  %></h5>
+                       <%= image_tag("thumbs23.png", :style => "width: 21px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                           &nbsp;<span style="font-size: 15px;">
+                             <% @likes = LikesClosedGroup.where(:closed_group_id => b.id) %>
+                             <%= @likes.length %>
+                           </span>
+                          <br />
+                          <%= image_tag("group4.png", :style => "width: 30px; height: 25px; padding-bottom:7px;", :class => "element") %>
+                         &nbsp;<span style="font-size: 15px;">
+                          <% users = UserClosedGroup.where(:closed_group_id => b.id) %>
+                          <%= users.length %>
+                         </span>
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:65%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                        <%= b.decription %>
+                      </td> 
+                  </tr>
 
                   <%
                 end
         end
+        if count == 0
+          %>
 
+            <div style="width:100%; text-align: center; padding: 20px; border:1px black solid " > 
+                Няма резултати от търсенето по тези критерии
+            </div>
+
+          <%
+        end
         %>
-        <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; ">
-                <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;  " > Резултати от търсенето </button>
-  
+
+
+        </table>
+        </div>
+         <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; margin-bottom:30px; ">
+                <button class="large" style="width:100%; background-color:#333; text-align:center; font-weight: bold; color:white;  " > Резултати от Въпроси </button>
+              
                 <table style=" border: 1px #ccc solid; width:100%; margin-left:auto; margin-right: auto;" >
-                        <tr>
-                                <td  style=" border-bottom: 1px #ccc solid; width:30%; text-align:center;">
-                                        <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;">
-                                                Името на групата</h5>
-                                        <img src="imgs/thumbs23.png" style="width: 21px; height: 25px; padding-bottom:7px;" > &nbsp;<span style="font-size: 15px;">120</span>
-                                        <br />
-                                        <img src="imgs/group4.png" style="width: 30px; height: 25px; padding-bottom:7px;" > &nbsp;<span style="font-size: 15px;">120</span>
-                                </td>
-                                <td  style=" border-bottom: 1px #ccc solid; width:70%; padding: 0px 10px 10px 10px; text-align:justify; ">
-                                        <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
-                                        asddd ddddddd ddddddd ddddddddd dddd dddddddd ad
-                                </td> 
-                        </tr>
+                <% count = 0
+                   @questionsT.each do |b|
+                   qQuest.push(b.id)
+                   count += 1
+                %>
+                  <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:40%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;"><%= link_to b.topic, quick_question_path(b.id) %></h5>
+                      
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:60%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                      <%=b.question %>
+                      </td> 
+                    
+                  </tr>
+                <% end 
+
+                 @questionsQ.each do |b|
+                  count += 1
+                    if !qQuest.include?(b.id)
+                  %>
+                  
+                   <tr>
+                    <td  style=" border-bottom: 1px #ccc solid; width:40%; text-align:center;">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; color:black;"><%= link_to b.topic, quick_question_path(b.id) %></h5>
+                      
+                    </td>
+                    <td  style=" border-bottom: 1px #ccc solid; width:60%; padding: 0px 10px 10px 10px; text-align:justify; ">
+                      <h5 style="font-size: 1.3rem; margin:0; margin-top: 5px; margin-bottom: 10px; text-align: center; color:black;">Описание:</h5>
+                      <%=b.question %>
+                      </td> 
+                    
+                  </tr>
+
+
+                  <%
+                    end
+                 end
+
+                if count == 0
+                %>
+
+                  <div style="width:100%; text-align: center; padding: 20px; border:1px black solid " > 
+                      Няма резултати от търсенето по тези критерии
+                  </div>
+
+
+                  <% end %>
+
                 </table>
+
         </div>
         <% end %>        
 </div>
@@ -170,7 +350,7 @@
                         <%
                         showQuest = false
                         questionCounter += 1 %>
-                        <li><%= link_to x.question, quick_question_path(x.id) %></li>
+                        <li><%= link_to x.topic, quick_question_path(x.id) %></li>
                         <% 
                         if questionCounter == 7
                           break
@@ -183,7 +363,9 @@
         <nav>
               
                 <ul class="side-menu" style="position: static; top: 65px; z-index: 1000;margin-top:-1px; ">
+                  <%= link_to random_groups_path, :style => "padding-left: -0px !important; " do %>
                   <button class="large button span_5_of_5" style="margin-top: 0px; font-size: 16px; background-color:#2e92cf; color: white; font-weight: bold;">Случайни групи</button>
+                  <% end %>
                     <% opens = OpenGroup.all
                     limit = 0;
                     opens.shuffle.each do |x| 

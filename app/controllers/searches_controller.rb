@@ -9,6 +9,9 @@ class SearchesController < ApplicationController
      @courseDesResults = Course.find(:all, :conditions => ['lower(description) LIKE ?', "%#{params[:search]}%".downcase])
      @closedDesResults = ClosedGroup.find(:all, :conditions => ['lower(decription) LIKE ?', "%#{params[:search]}%".downcase])
 
+     @questionsT = QuickQuestion.find(:all, :conditions => ['lower(topic) LIKE ?', "%#{params[:search]}%".downcase])
+     @questionsQ = QuickQuestion.find(:all, :conditions => ['lower(question) LIKE ?', "%#{params[:search]}%".downcase])
+
         else
 
      @openResults = OpenGroup.find(:all)
@@ -17,6 +20,8 @@ class SearchesController < ApplicationController
      @openDesResults = OpenGroup.find(:all)
      @courseDesResults = Course.find(:all)
      @closedDesResults = ClosedGroup.find(:all)
+     @questionsT = QuickQuestion.find(:all)
+     @questionsQ = QuickQuestion.find(:all)
 
     end
   end 
