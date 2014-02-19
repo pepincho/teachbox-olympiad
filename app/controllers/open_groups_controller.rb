@@ -149,4 +149,22 @@ class OpenGroupsController < ApplicationController
     end
   end
 
+  def leave
+
+    @leave_group = UserOpenGroup.where("user_id = ? AND open_group_id = ?", current_user.id,  params[:id])
+    @leave_group.each do |lol| 
+      lol.destroy
+    end
+
+    @leave_group = LikesOpenGroup.where("user_id = ? AND open_group_id = ?", current_user.id,  params[:id])
+    @leave_group.each do |lol| 
+      lol.destroy
+    end
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      # format.json { head :no_content }
+    end
+  end
+
 end

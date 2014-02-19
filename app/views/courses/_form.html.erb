@@ -57,20 +57,17 @@
 
        <div class="middle-pane"> 
        <%= form_for(@course) do |f| %>
-        <% if @course.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= pluralize(@course.errors.count, "error") %> prohibited this course from being saved:</h2>
 
-            <ul>
+         <div style="width:95%; margin-top:21px; margin-left:auto; margin-right: auto; text-align: center;">
+            <h2> Създаване на нов курс </h2>
+            <% if @course.errors.any? %>
+          <div id="error_explanation" style="text-align:center; margin-left: auto; margin-right: auto; color: red; margin-top:20px; margin-bottom: -20px;">
             <% @course.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
+              <li>Съществува курс с това име.</li>
             <% end %>
             </ul>
           </div>
         <% end %>
-
-         <div style="width:95%; margin-top:21px; margin-left:auto; margin-right: auto; text-align: center;">
-            <h2> Създаване на нов курс </h2>
             <table cellpadding="0" style=" border: 1px #ccc solid; width:80%; margin-left:auto; margin-right: auto; margin-top: 40px;" >
                   <tr>
                     <td  style="height:auto; border-bottom: 1px #ccc solid; border-right: 1px #ccc solid; width:30%; text-align:center;">

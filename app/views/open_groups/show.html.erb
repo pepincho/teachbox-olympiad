@@ -29,6 +29,7 @@
           
         </div>
         <div style="text-align: center;">
+          <%= @leave_group %>
           <% if current_user.present? && !@pesho %>
             
               <%= button_to "Влез", {:controller => :open_groups, :action => :join, :id => @open_group.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ", :class => "large"} %>
@@ -36,6 +37,9 @@
           <% end %>
           <% if current_user.present? && !@ivan && @pesho %>
             <%= button_to "Харесай", {:controller => :open_groups, :action => :like, :id => @open_group.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ", :class => "large"} %>`
+          <% end %>
+           <% if current_user.present? && @pesho %>
+            <%= button_to "Напусни", {:controller => :open_groups, :action => :leave, :id => @open_group.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white; ", :class => "large"} %>`
           <% end %>
           
         </div>
@@ -146,7 +150,7 @@
   
 <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; margin-bottom: 300px; ">
         <%  linkTo = 1
-            @neshto.each do |post| 
+            @neshto.reverse.each do |post| 
               @martin = false
               some = LikesOpenGroupPost.where("open_group_post_id = ?", post.id) 
               @comments = CommentsOpenGroupPost.where("open_group_post_id = ?", post.id) 
