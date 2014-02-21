@@ -165,5 +165,23 @@ end
       # format.json { head :no_content }
     end
   end
+
+  def leave
+
+    @leave_group = UserClosedGroup.where("user_id = ? AND closed_group_id = ?", current_user.id,  params[:id])
+    @leave_group.each do |lol| 
+      lol.destroy
+    end
+
+    @leave_group = LikesClosedGroup.where("user_id = ? AND closed_group_id = ?", current_user.id,  params[:id])
+    @leave_group.each do |lol| 
+      lol.destroy
+    end
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      # format.json { head :no_content }
+    end
+  end
    
 end

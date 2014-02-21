@@ -32,15 +32,17 @@
           
         </div>
         <div style="text-align: center;">
+
         <% if current_user.present? && !(@isRequested || @pesho2) %>
           <%= button_to "Кандидадствай", {:controller => :closed_groups, :action => :requested, :id => @closed_group.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ", :class => "large"} %>
         <% end %>
-
         <% if current_user.present? && !@ivan2 && @pesho2 %>
           <%= button_to "Харесай", {:controller => :closed_groups, :action => :like, :id => @closed_group.id}, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ", :class => "large"} %>`
         <% end %>
+        <% if current_user.present? && @pesho2 %>
+            <%= button_to "Напусни", {:controller => :closed_groups, :action => :leave, :id => @closed_group.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white; ", :class => "large"} %>`
+          <% end %>
 
-          
         </div>
         <nav>
               <%    count = 0
