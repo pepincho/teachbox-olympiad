@@ -64,7 +64,7 @@
                           <%= form_for(QuickQuestion.new, 
         :url => { :controller => :quick_questions, 
         :action => :create, 
-        :user_id => current_user.id }, :html => {:method => :post}) do |f| %>
+        :user_id => current_user.id }, :html => {:method => :post,:name => "quickCreateForm" , :onSubmit => 'return validateQuickCreateForm();' }) do |f| %>
         <% if @quick_question.errors.any? %>
           <div id="error_explanation">
             <h2><%= pluralize(@quick_question.errors.count, "error") %> prohibited this quick_question from being saved:</h2>
