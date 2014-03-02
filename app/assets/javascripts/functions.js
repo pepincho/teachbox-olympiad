@@ -1,3 +1,6 @@
+
+
+
 function validateRegForm()
 {
 var name=document.forms["registrationForm"]["user[name]"].value;

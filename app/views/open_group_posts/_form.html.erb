@@ -1,4 +1,4 @@
-<%= form_for(@open_group_post) do |f| %>
+<%= form_for(@open_group_post, :html => { :multipart => true }) do |f| %>
   <% if @open_group_post.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@open_group_post.errors.count, "error") %> prohibited this open_group_post from being saved:</h2>
@@ -26,6 +26,12 @@
   <div class="field">
     <%= f.label :user_id %><br />
     <%= f.number_field :user_id %>
+  </div>
+  <div class="field">
+      <%= "lol" %>
+   <% f.fields_for :asset_opens do |asset| %>
+    <%= asset.file_field :attach %>
+   <% end %>
   </div>
   <div class="actions">
     <%= f.submit %>

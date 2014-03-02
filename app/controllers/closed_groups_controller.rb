@@ -15,6 +15,13 @@ class ClosedGroupsController < ApplicationController
   def show
     @closed_group = ClosedGroup.find(params[:id])
     @closed_group_admin = User.find(@closed_group.admin_id).name
+
+
+    if @closed_group.admin_id == current_user.id
+      @isAdmin1 = true 
+    else
+      @isAdmin1 = false
+    end
     # respond_to do |format|
     #   format.html # show.html.erb
     #   format.json { render json: @closed_group }
@@ -159,6 +166,24 @@ end
     like_comment.user_id = current_user.id
     like_comment.comments_closed_group_post_id = params[:id]
     like_comment.save
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      # format.json { head :no_content }
+    end
+  end
+
+  def leave
+
+    @leave_group = UserClosedGroup.where("user_id = ? AND closed_group_id = ?", current_user.id,  params[:id])
+    @leave_group.each do |lol| 
+      lol.destroy
+    end
+
+    @leave_group = LikesClosedGroup.where("user_id = ? AND closed_group_id = ?", current_user.id,  params[:id])
+    @leave_group.each do |lol| 
+      lol.destroy
+    end
 
     respond_to do |format|
       format.html { redirect_to :back }

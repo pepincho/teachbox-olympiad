@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140215211009) do
+ActiveRecord::Schema.define(:version => 20140226194037) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "namespace"
@@ -46,17 +46,59 @@ ActiveRecord::Schema.define(:version => 20140215211009) do
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
 
+  create_table "asset_opens", :force => true do |t|
+    t.integer  "open_group_post_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
   create_table "closed_group_posts", :force => true do |t|
     t.integer  "closed_group_id"
     t.text     "content"
     t.integer  "user_id"
     t.string   "title"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.string   "attach_file_name"
     t.string   "attach_content_type"
     t.integer  "attach_file_size"
     t.datetime "attach_updated_at"
+    t.string   "attach1_file_name"
+    t.string   "attach1_content_type"
+    t.integer  "attach1_file_size"
+    t.datetime "attach1_updated_at"
+    t.string   "attach2_file_name"
+    t.string   "attach2_content_type"
+    t.integer  "attach2_file_size"
+    t.datetime "attach2_updated_at"
+    t.string   "attach3_file_name"
+    t.string   "attach3_content_type"
+    t.integer  "attach3_file_size"
+    t.datetime "attach3_updated_at"
+    t.string   "attach4_file_name"
+    t.string   "attach4_content_type"
+    t.integer  "attach4_file_size"
+    t.datetime "attach4_updated_at"
+    t.string   "attach5_file_name"
+    t.string   "attach5_content_type"
+    t.integer  "attach5_file_size"
+    t.datetime "attach5_updated_at"
+    t.string   "attach6_file_name"
+    t.string   "attach6_content_type"
+    t.integer  "attach6_file_size"
+    t.datetime "attach6_updated_at"
+    t.string   "attach7_file_name"
+    t.string   "attach7_content_type"
+    t.integer  "attach7_file_size"
+    t.datetime "attach7_updated_at"
+    t.string   "attach8_file_name"
+    t.string   "attach8_content_type"
+    t.integer  "attach8_file_size"
+    t.datetime "attach8_updated_at"
+    t.string   "attach9_file_name"
+    t.string   "attach9_content_type"
+    t.integer  "attach9_file_size"
+    t.datetime "attach9_updated_at"
   end
 
   create_table "closed_groups", :force => true do |t|
@@ -97,12 +139,48 @@ ActiveRecord::Schema.define(:version => 20140215211009) do
     t.integer  "course_id"
     t.string   "title"
     t.integer  "user_id"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.string   "attach_file_name"
     t.string   "attach_content_type"
     t.integer  "attach_file_size"
     t.datetime "attach_updated_at"
+    t.string   "attach1_file_name"
+    t.string   "attach1_content_type"
+    t.integer  "attach1_file_size"
+    t.datetime "attach1_updated_at"
+    t.string   "attach2_file_name"
+    t.string   "attach2_content_type"
+    t.integer  "attach2_file_size"
+    t.datetime "attach2_updated_at"
+    t.string   "attach3_file_name"
+    t.string   "attach3_content_type"
+    t.integer  "attach3_file_size"
+    t.datetime "attach3_updated_at"
+    t.string   "attach4_file_name"
+    t.string   "attach4_content_type"
+    t.integer  "attach4_file_size"
+    t.datetime "attach4_updated_at"
+    t.string   "attach5_file_name"
+    t.string   "attach5_content_type"
+    t.integer  "attach5_file_size"
+    t.datetime "attach5_updated_at"
+    t.string   "attach6_file_name"
+    t.string   "attach6_content_type"
+    t.integer  "attach6_file_size"
+    t.datetime "attach6_updated_at"
+    t.string   "attach7_file_name"
+    t.string   "attach7_content_type"
+    t.integer  "attach7_file_size"
+    t.datetime "attach7_updated_at"
+    t.string   "attach8_file_name"
+    t.string   "attach8_content_type"
+    t.integer  "attach8_file_size"
+    t.datetime "attach8_updated_at"
+    t.string   "attach9_file_name"
+    t.string   "attach9_content_type"
+    t.integer  "attach9_file_size"
+    t.datetime "attach9_updated_at"
   end
 
   create_table "courses", :force => true do |t|
@@ -192,12 +270,48 @@ ActiveRecord::Schema.define(:version => 20140215211009) do
     t.integer  "open_group_id"
     t.string   "title"
     t.integer  "user_id"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.string   "attach_file_name"
     t.string   "attach_content_type"
     t.integer  "attach_file_size"
     t.datetime "attach_updated_at"
+    t.string   "attach1_file_name"
+    t.string   "attach1_content_type"
+    t.integer  "attach1_file_size"
+    t.datetime "attach1_updated_at"
+    t.string   "attach2_file_name"
+    t.string   "attach2_content_type"
+    t.integer  "attach2_file_size"
+    t.datetime "attach2_updated_at"
+    t.string   "attach3_file_name"
+    t.string   "attach3_content_type"
+    t.integer  "attach3_file_size"
+    t.datetime "attach3_updated_at"
+    t.string   "attach4_file_name"
+    t.string   "attach4_content_type"
+    t.integer  "attach4_file_size"
+    t.datetime "attach4_updated_at"
+    t.string   "attach5_file_name"
+    t.string   "attach5_content_type"
+    t.integer  "attach5_file_size"
+    t.datetime "attach5_updated_at"
+    t.string   "attach6_file_name"
+    t.string   "attach6_content_type"
+    t.integer  "attach6_file_size"
+    t.datetime "attach6_updated_at"
+    t.string   "attach7_file_name"
+    t.string   "attach7_content_type"
+    t.integer  "attach7_file_size"
+    t.datetime "attach7_updated_at"
+    t.string   "attach8_file_name"
+    t.string   "attach8_content_type"
+    t.integer  "attach8_file_size"
+    t.datetime "attach8_updated_at"
+    t.string   "attach9_file_name"
+    t.string   "attach9_content_type"
+    t.integer  "attach9_file_size"
+    t.datetime "attach9_updated_at"
   end
 
   create_table "open_groups", :force => true do |t|

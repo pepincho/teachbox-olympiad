@@ -109,6 +109,8 @@
                         :url => { :controller => :open_group_posts, 
                         :action => :create, 
                         :open_group_id => @open_group.id, :user_id => current_user.id }, :html => {:method => :post}) do |f| %>
+
+                      <% currentShown = 0 %>
                       <% if OpenGroupPost.new.errors.any? %>
                         <div id="error_explanation">
                           <h2> <%= pluralize(OpenGroupPost.new.errors.count, "error") %> prohibited this open_group_post from being saved: </h2>
@@ -118,7 +120,9 @@
                             <% end %>
                           </ul>
                         </div>
-                      <% end %>
+                      <% 
+                      k = 'att0'
+                      end %>
                     <div class="input-control text" style="margin:0; margin-bottom:-4px;">
                       <%= f.text_field :title, :style => 'height:30px;', :class => 'center-placeholder', :placeholder => 'Заглавие'  %>
                       <button class="btn-clear"></button>
@@ -130,22 +134,61 @@
                     <td style="width:50%;">
                       <button type="submit", style="height: 30px; width:99.5%; background-color:#333; font-weight: bold; text-align:center; color:white; margin-left:auto; margin-right: auto;"> Публикувай </button>
                     </td>
-
                     <td style="width:50%;">
-
-                        <div id="test">
-                          <div class="wrapper">
-                             <%= f.file_field :attach  %>
-                          </div>
-                          <button style="height: 30px; width:100%; background-color:#333; font-weight: bold; text-align:center; color:white;" > Прикачи файл  </button>
-                        </div>
+                      <a> <div id="divL" style="font-size: 14px!important; height: 30px; width:99.5%; padding: auto; background-color:#333; padding-top: 5px; font-weight: bold; text-align:center; color:white; margin-left:auto; margin-right: auto;" onclick="showdiv();" > Добави файл </div> </a>
 
 
+                      <%= javascript_tag do %>
+                        var inc = <%= currentShown.to_json %>
+                        function showdiv() {
+                            var stuff = 'att' + inc;
+                            inc++;
+                            var div = document.getElementById(stuff);
+                            div.style.display = 'block';
+                       }
+                      <% end %>
+
+
+                      <script type="text/javascript">
+                      
+
+                      </script>
+                    
                     </td>
-                  </tr>
-                  <% end %>
-                  <% end %>
+                    </tr>    
                 </table>
+
+                  <table style="margin:20px 0 20px 0; text-align: center; width:95%; margin-left:auto; margin-right: auto;">
+                         <tr style="text-align: center;">
+                            <td style="width:50%;" > <%= f.file_field :attach, :style => "display: none;", :id => "att0" %> </td>
+                            <td style="width:50%;"> <%= f.file_field :attach1,:style => "display: none;width: 270px;
+", :id => "att1"  %> </td>
+                         </tr>    
+                          <tr style="text-align: center;">
+                            <td style="width:50%;"> <%= f.file_field :attach2,:style => "display: none;", :id => "att2"  %> </td>
+                            <td style="width:50%;"> <%= f.file_field :attach3, :style => "display: none;width: 270px;
+",:id => "att3"  %> </td>
+                         </tr>   
+                          <tr style="text-align: center;">
+                            <td style="width:50%;"> <%= f.file_field :attach4,:style => "display: none;", :id => "att4"  %> </td>
+                            <td style="width:50%;"> <%= f.file_field :attach5,:style => "display: none;width: 270px;
+", :id => "att5"  %> </td>
+                         </tr>   
+                          <tr style="text-align: center;">
+                            <td style="width:50%;"> <%= f.file_field :attach6,:style => "display: none;", :id => "att6"  %> </td>
+                            <td style="width:50%;"> <%= f.file_field :attach7,:style => "display: none;width: 270px;
+", :id => "att7"  %> </td>
+                         </tr>   
+                         <tr style="text-align: center;">
+                            <td style="width:50%;"> <%= f.file_field :attach8,:style => "display: none;", :id => "att8"  %> </td>
+                            <td style="width:50%;"> <%= f.file_field :attach9,:style => "display: none;width: 270px;
+", :id => "att9"  %> </td>
+                         </tr>   
+                  </table>
+
+                  <% end %>
+                  <% end %>
+              
               </div>
   
 <div style="width:95%; margin-top:20px; margin-left:auto; margin-right: auto; margin-bottom: 300px; ">
@@ -262,11 +305,62 @@
                     <div class="frames" >
                       <div class="frame" id="_page_<%= linkTo %>" style="text-align: center" >
                       <% linkTo += 1 %>
+                      <% countAtt = 0 %>
                          <% if post.attach.exists? %>
-                            <a href="<%= post.attach.url %> "> <b> File attached </b> </a>
-                          <% else %>
+                            <a href="<%= post.attach.url %> "> <b> <%= post.attach.original_filename %> </b> </a>
+                            <% countAtt += 1 %>
+                            <br />
+                          <% end %>
+                          <% if post.attach1.exists? %>
+                           <% countAtt += 1 %>
+                            <a href="<%= post.attach1.url %> "> <b> <%= post.attach1.original_filename %> </b> </a>
+                            <br />
+                          <% end %>
+                          <% if post.attach2.exists? %>
+                           <% countAtt += 1 %>
+                            <a href="<%= post.attach2.url %> "> <b> <%= post.attach2.original_filename %> </b> </a>
+                            <br />
+                          <% end %>
+                          <% if post.attach3.exists? %>
+                           <% countAtt += 1 %>
+                            <a href="<%= post.attach3.url %> "> <b> <%= post.attach3.original_filename %> </b> </a>
+                            <br />
+                          <% end %>
+                          <% if post.attach4.exists? %>
+                           <% countAtt += 1 %>
+                            <a href="<%= post.attach4.url %> "> <b> <%= post.attach4.original_filename %> </b> </a>
+                            <br />
+                          <% end %>
+                          <% if post.attach5.exists? %>
+                           <% countAtt += 1 %>
+                            <a href="<%= post.attach5.url %> "> <b> <%= post.attach5.original_filename %> </b> </a>
+                            <br />
+                          <% end %>
+                          <% if post.attach6.exists? %>
+                           <% countAtt += 1 %>
+                            <a href="<%= post.attach6.url %> "> <b> <%= post.attach6.original_filename %> </b> </a>
+                            <br />
+                          <% end %>
+                          <% if post.attach7.exists? %>
+                           <% countAtt += 1 %>
+                            <a href="<%= post.attach7.url %> "> <b> <%= post.attach7.original_filename %> </b> </a>
+                            <br />
+                          <% end %>
+                          <% if post.attach8.exists? %>
+                           <% countAtt += 1 %>
+                            <a href="<%= post.attach8.url %> "> <b> <%= post.attach8.original_filename %> </b> </a>
+                            <br />
+                          <% end %>
+                          <% if post.attach9.exists? %>
+                           <% countAtt += 1 %>
+                            <a href="<%= post.attach9.url %> "> <b> <%= post.attach9.original_filename %> </b> </a>
+                            <br />
+                          <% end %>
+
+                          <% if countAtt == 0 %>
                                Този пост няма прикачени файлове !
                           <% end %>
+
                       </div>
                       <div class="frame" id="_page_<%= linkTo %>">
                       <% linkTo += 1 %>

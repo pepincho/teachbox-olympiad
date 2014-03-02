@@ -36,6 +36,8 @@ TeachboxNoit::Application.routes.draw do
 
   resources :requests 
 
+  resources :asset_opens
+
   root to: 'menu#index'
   devise_for :users
 
@@ -52,11 +54,12 @@ TeachboxNoit::Application.routes.draw do
      post :leave, :on => :collection
   end
 
-  resources :closed_groups do
+ resources :closed_groups do
      post :requested, :on => :collection
      post :like, :on => :collection
      post :like_post, :on => :collection
      post :like_comment, :on => :collection
+     post :leave, :on => :collection
   end
   
   resources :courses do
@@ -64,6 +67,7 @@ TeachboxNoit::Application.routes.draw do
      post :like, :on => :collection
      post :like_post, :on => :collection
      post :like_comment, :on => :collection
+     post :leave, :on => :collection
   end
 
   resources :requests do

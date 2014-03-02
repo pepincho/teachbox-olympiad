@@ -40,6 +40,10 @@
           <% if current_user.present? && !@ivan1 && @pesho1 %>
             <%= button_to "Харесай", {:controller => :courses, :action => :like, :id => @course.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white;  ", :class => "large"} %>`
           <% end %>
+
+          <% if current_user.present? && !@isAdmin %>
+            <%= button_to "Напусни", {:controller => :courses, :action => :leave, :id => @course.id }, {:style => "width:100%;  background-color:#333; text-align:center; font-weight: bold; color:white; ", :class => "large"} %>`
+          <% end %>
           
         </div>
        <nav>

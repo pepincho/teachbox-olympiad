@@ -15,6 +15,14 @@ class CoursesController < ApplicationController
   def show
     @course = Course.find(params[:id])
     @course_admin = User.find(@course.user_id).name
+
+
+   if @course.user_id == current_user.id
+      @isAdmin = true
+      
+    else
+      @isAdmin = false
+    end
     # respond_to do |format|
     #   format.html # show.html.erb
     #   format.json { render json: @closed_group }
@@ -153,6 +161,24 @@ end
     like_comment.user_id = current_user.id
     like_comment.comments_course_post_id = params[:id]
     like_comment.save
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      # format.json { head :no_content }
+    end
+  end
+
+
+   def leave
+    @leave_group = UserCourse.where("user_id = ? AND course_id = ?", current_user.id,  params[:id])
+    @leave_group.each do |lol| 
+      lol.destroy
+    end
+
+    @leave_group = LikesCourse.where("user_id = ? AND course_id = ?", current_user.id,  params[:id])
+    @leave_group.each do |lol| 
+      lol.destroy
+    end
 
     respond_to do |format|
       format.html { redirect_to :back }

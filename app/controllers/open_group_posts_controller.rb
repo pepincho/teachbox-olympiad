@@ -25,7 +25,7 @@ class OpenGroupPostsController < ApplicationController
   # GET /open_group_posts/new.json
   def new
     @open_group_post = OpenGroupPost.new
-    
+    5.times {@open_group_post.asset_opens.build}
 
     respond_to do |format|
       format.html # new.html.erb
@@ -36,6 +36,7 @@ class OpenGroupPostsController < ApplicationController
   # GET /open_group_posts/1/edit
   def edit
     @open_group_post = OpenGroupPost.find(params[:id])
+     5.times {@open_group_post.asset_opens.build}
   end
 
   # POST /open_group_posts
